@@ -1,0 +1,66 @@
+<aura:component controller="Sales_stats"
+  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+  access="global">
+  <aura:attribute name="runningUserId" type="string" />
+  <aura:attribute name="firstName" type="string" />
+  <aura:attribute name="lastName" type="string" />
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <aura:attribute name="SalesTarget" type="Sales_target__c[]" />
+  <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
+  <aura:attribute name="progress" type="Integer" default="0" />
+  <article class="slds-card">
+    <div class="slds-card__body slds-card__body_inner">
+
+      <aura:iteration items="{!v.SalesTarget}" var="Sales">
+
+        <table border="1">
+          <tr>
+            <td colspan="5" class="title">
+              Sales target {!Sales.Sales_rep__r.Name}
+            </td>
+          </tr>
+          <tr>
+            <td rowspan="2">
+              <div class="slds">
+                <span class="slds-avatar slds-avatar--circle">
+                  <img src="{!Sales.icon__c}" alt="Sales rep picture" class="imgCls" />
+                </span>
+              </div>
+            </td>
+            <td class="table-width">Target this quarter: </td>
+            <td>{!Sales.Target_Q2__c}</td>
+            <td>1</td>
+            <td rowspan="2">
+              <div class="percentage">{!Sales.Target_percentage__c}%</div>
+            </td>
+
+          </tr>
+          <tr>
+            <td class="table-width">Sales this quarter: </td>
+            <td>{!Sales.Sales_to_date_this_quarter__c}</td>
+            <td>2</td>
+
+          </tr>
+          <tr>
+            <td colspan="5">
+              <lightning:progressBar value="{!Sales.Target_percentage__c}" />
+            </td>
+          </tr>
+        </table>
+
+
+
+      </aura:iteration>
+
+    </div>
+    <footer class="slds-card__footer">
+    </footer>
+  </article>
+
+
+
+
+
+
+
+</aura:component>
