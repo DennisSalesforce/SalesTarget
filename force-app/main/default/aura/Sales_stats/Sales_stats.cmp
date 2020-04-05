@@ -2,54 +2,48 @@
   implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
   access="global">
   <aura:attribute name="runningUserId" type="string" />
-  <aura:attribute name="firstName" type="string" />
-  <aura:attribute name="lastName" type="string" />
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
   <aura:attribute name="SalesTarget" type="Sales_target__c[]" />
   <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:attribute name="progress" type="Integer" default="0" />
+  <aura:attribute name="daysLeftInQuarter" type="Integer" default="0" />
+  <aura:attribute name="activeSections" type="List" default="[]" />
   <article class="slds-card">
     <div class="slds-card__body slds-card__body_inner">
 
       <aura:iteration items="{!v.SalesTarget}" var="Sales">
 
-        <table border="1">
-          <tr>
-            <td colspan="5" class="title">
-              Sales target {!Sales.Sales_rep__r.Name}
-            </td>
-          </tr>
-          <tr>
-            <td rowspan="2">
-              <div class="slds">
-                <span class="slds-avatar slds-avatar--circle">
-                  <img src="{!Sales.icon__c}" alt="Sales rep picture" class="imgCls" />
-                </span>
+        <div class="demo-only" style="width:30rem">
+          <article class="slds-tile slds-media">
+            <div class="slds-media__figure">
+              <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
+                <img alt="" src="{!Sales.icon__c}" title="{!Sales.Sales_rep__r.Name}" />
+              </span>
+            </div>
+            <div class="slds-media__body">
+              <h3 class="slds-tile__title slds-truncate" title="{!Sales.Sales_rep__r.Name}">
+                <a href="javascript:void(0);">{!Sales.Sales_rep__r.Name}</a>
+              </h3>
+              <div class="slds-tile__detail">
+                <dl class="slds-list_horizontal slds-wrap">
+                  <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">Target:</dt>
+                  <dd class="slds-item_detail slds-truncate" title="Description for first label">€ <lightning:formattedNumber value="{!Sales.Target_this_quarter__c}"/></dd>
+                  <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Second Label">Sales:</dt>
+                  <dd class="slds-item_detail slds-truncate" title="Description for second label">€ <lightning:formattedNumber value="{!Sales.Sales_to_date_this_quarter__c}"/></dd>
+                </dl>
               </div>
-            </td>
-            <td class="table-width">Target this quarter: </td>
-            <td>{!Sales.Target_Q2__c}</td>
-            <td>1</td>
-            <td rowspan="2">
-              <div class="percentage">{!Sales.Target_percentage__c}%</div>
-            </td>
-
-          </tr>
-          <tr>
-            <td class="table-width">Sales this quarter: </td>
-            <td>{!Sales.Sales_to_date_this_quarter__c}</td>
-            <td>2</td>
-
-          </tr>
-          <tr>
-            <td colspan="5">
-              <lightning:progressBar value="{!Sales.Target_percentage__c}" />
-            </td>
-          </tr>
-        </table>
-
-
-
+              <div class="test-right">
+                <dl class="slds-list_horizontal slds-wrap">
+                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Second Label">Remaning Days: </dt>
+                  <dd class="slds-item_detail slds-truncate" title="Description for second label">{!v.daysLeftInQuarter} </dd>
+                  <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Second Label">Progress: </dt>
+                  <dd class="slds-item_detail slds-truncate" title="Description for second label">{!Sales.Target_percentage__c}% </dd>
+                </dl>
+              </div>
+            </div>  
+          </article>
+          <lightning:progressBar value="{!Sales.Target_percentage__c}" />
+        </div>
       </aura:iteration>
 
     </div>

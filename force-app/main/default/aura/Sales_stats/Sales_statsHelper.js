@@ -11,7 +11,16 @@
              });
     		$A.enqueueAction(action);
         
-	},   
+    },   
+    doInitDaysLeft : function(component, event) {      
+        var action = component.get("c.daysLeftInQuarter");
+        action.setCallback(this, function(response){
+            component.set("v.daysLeftInQuarter", response.getReturnValue());
+        	console.log(response.getReturnValue());
+             });
+    		$A.enqueueAction(action);
+        
+    }, 
     onRender: function (cmp) {
         var interval = setInterval($A.getCallback(function () {
             var progress = cmp.get('v.progress');

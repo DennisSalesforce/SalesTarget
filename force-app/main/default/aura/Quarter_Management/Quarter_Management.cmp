@@ -1,0 +1,17 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="Q1EndDate" type="date" default="" />
+    <aura:attribute name="Q2EndDate" type="date" default="" />
+    <aura:attribute name="Q3EndDate" type="date" default="" />
+    <aura:attribute name="Q4EndDate" type="date" default="" />
+    <aura:attribute name="Q1StartDate" type="date" default="" />
+    <aura:attribute name="Q2StartDate" type="date" default="" />
+    <aura:attribute name="Q3StartDate" type="date" default="" />
+    <aura:attribute name="Q4StartDate" type="date" default="" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <article class="slds-card">
+        <footer class="slds-card__footer">
+        </footer>
+    </article>
+
+</aura:component>

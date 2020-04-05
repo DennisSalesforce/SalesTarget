@@ -33,3 +33,8 @@ Thumbs.db
 ehthumbs.db
 [Dd]esktop.ini
 $RECYCLE.BIN/
+force-app/main/default/aura/svgIcon/svgIcon.cmp
+.gitignore
+force-app/main/default/aura/svgIcon/svgIcon.cmp-meta.xml
+force-app/main/default/aura/svgIcon/svgIconHelper.js
+force-app/main/default/aura/svgIcon/svgIconRenderer.js

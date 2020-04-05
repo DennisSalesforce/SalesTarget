@@ -1,5 +1,5 @@
 .THIS .percentage{
-    Font-size : 20px;
+    Font-size : 26px;
     font-weight : bolt;
 }
 
@@ -16,7 +16,21 @@
     font-weight : bolt;
 }
 
-.THIS .table-width{
-    width: auto;
-    font-weight : bolt;
+.THIS .slds-tile__detail{
+    float: left;
+    width: 50%;
+}
+
+.THIS .slds-truncate{
+    width : 60% !important; 
+}
+
+.THIS .test-right{
+    width: 50%;
+    float: right;
+}
+
+.THIS .slds-media__body > div {
+    display: inline-block;
+    vertical-align: middle;
 }
