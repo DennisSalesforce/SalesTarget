@@ -39,6 +39,7 @@
                 </dl>
               </div>
             </div>  
+            Position: {!Sales.Position__c}/{!Sales.of_sales_targets__c}
           </article>
           <lightning:progressBar value="{!Sales.Target_percentage__c}" /><br/>
         </div>

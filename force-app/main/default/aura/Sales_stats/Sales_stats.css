@@ -17,18 +17,20 @@
 }
 
 .THIS .slds-tile__detail{
+  /*  flex box / inline block */
     float: left;
     width: 50%;
+}
+
+.THIS .test-right{
+    width: 50%;
+    float: left;
 }
 
 .THIS .slds-truncate{
     width : 60% !important; 
 }
 
-.THIS .test-right{
-    width: 50%;
-    float: right;
-}
 
 .THIS .slds-media__body > div {
     display: inline-block;

@@ -8,6 +8,7 @@ trigger opportunityTrigger on Opportunity (before insert, before update) {
         if(opp.StageName == 'Closed Won'){
             
             opportunityHandler.updateSalesTarget(userID, amount, oppID);
+            opportunityHandler.updatePosition(userID, amount, oppID);
         }
       
 
