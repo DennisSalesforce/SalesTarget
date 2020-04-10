@@ -1,2 +1,7 @@
-.THIS {
+.THIS .quarters{
+    margin-left : 30px;
+}
+
+.THIS .slds-text-title{
+    margin-bottom: 15px;
 }

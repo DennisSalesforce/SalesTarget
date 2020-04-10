@@ -5,14 +5,23 @@
   <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:attribute name="progress" type="Integer" default="0" />
   <aura:attribute name="daysLeftInQuarter" type="Integer" default="0" />
+  <aura:attribute name="filters" type="String" default="{}" />
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
   <article class="slds-card">
-    <div class="slds-card__body slds-card__body_inner">
-
+    
+    <div class="slds-show_inline-block left">
+      <div class="slds-text-title"><h1><b>Leaderboard: </b></h1></div>
+      <div class="filters">
+        <lightning:select name="0Family" label="Filter by:" onchange="{! c.updateFilter }">
+          <option value="Target_percentage__c">Target percentage</option>
+          <option value="Sales_to_date_this_quarter__c">Sales amount</option>
+        </lightning:select>
+      </div>
       <aura:iteration items="{!v.SalesTarget}" var="Sales">
 
         <div class="demo-only" style="width:30rem">
           <article class="slds-tile slds-media">
+           
             <div class="slds-media__figure">
               <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
                 <img alt="" src="{!Sales.icon__c}" title="{!Sales.Sales_rep__r.Name}" />
@@ -39,15 +48,15 @@
                 </dl>
               </div>
             </div>  
-            Position: {!Sales.Position__c}/{!Sales.of_sales_targets__c}
+           <!--Position: {!Sales.Position__c}/{!Sales.of_sales_targets__c}--> 
           </article>
           <lightning:progressBar value="{!Sales.Target_percentage__c}" /><br/>
         </div>
       </aura:iteration>
 
-    </div>
     <footer class="slds-card__footer">
     </footer>
+    </div>
   </article>
 
 

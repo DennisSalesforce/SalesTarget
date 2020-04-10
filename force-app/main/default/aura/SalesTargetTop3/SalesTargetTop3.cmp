@@ -1,0 +1,29 @@
+<aura:component controller="Sales_stats"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+    access="global">
+    <aura:attribute name="SalesTarget" type="Sales_target__c[]" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <article class="slds-card">
+        <div class="slds-text-title"><h1><b>Top 3 Sales:</b></h1></div><p></p>
+        <div class="slds-show_inline-block">
+            <div class="left"><img src="/resource/1586526789000/numbr1" class="medal" /></div>
+            <div class="left"><img src="/resource/1586526789000/numbr2" class="medal" /></div>
+            <div class="left"><img src="/resource/1586526789000/nmbr3" class="medal" /></div>
+        </div>
+        <div class="slds-show_inline-block">
+            <aura:iteration items="{!v.SalesTarget}" var="Top3">
+                <div class="right">
+                    <dl class="slds-list_horizontal slds-wrap">
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">Name:</dt>
+                        <dd class="slds-item_detail slds-truncate" title="Description for first label">
+                            {!Top3.Sales_rep__r.Name}</dd>
+                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">Sales:</dt>
+                        <dd class="slds-item_detail slds-truncate" title="Description for first label">€
+                            <lightning:formattedNumber value="{!Top3.Sales_to_date_this_quarter__c}" />
+                        </dd>
+                    </dl>
+                </div>
+            </aura:iteration>
+        </div>
+    </article>
+</aura:component>

@@ -11,7 +11,8 @@
     <aura:attribute name="Quarter" type="Quarter__mdt[]" />
 
     <article class="slds-card">
-        <h1>Quarter management:</h1><br/>
+        <div class="slds-text-title"><b>Quarter management:</b></div>
+        <div class="quarters">
         <aura:iteration items="{!v.Quarter}" var="Q">
             
             Quarter: {!Q.DeveloperName}  =
@@ -19,7 +20,7 @@
             End Date: {!Q.End_date__c}<br/>
             <br/>
         </aura:iteration>
-
+        </div>
         <footer class="slds-card__footer">
         </footer>
     </article>

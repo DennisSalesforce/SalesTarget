@@ -1,0 +1,16 @@
+.THIS .medal{
+    height : 75px;
+    width : 75px;
+}
+
+.THIS .left{
+    height : 100px;
+    margin-left: 20px;
+    margin-top: 30px;
+}
+
+.THIS .right{
+    height : 100px;
+    margin-left: 30px;
+    margin-top: 30px;
+}
