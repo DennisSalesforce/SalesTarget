@@ -3,14 +3,21 @@
     width : 75px;
 }
 
+.THIS .inline-box{
+    margin-top: 20px;
+}
+
 .THIS .left{
-    height : 100px;
+    height : 80px;
     margin-left: 20px;
-    margin-top: 30px;
+}
+
+.THIS .middle{
+    height : 80px;
+    margin-left: 20px;
 }
 
 .THIS .right{
-    height : 100px;
+    height : 80px;
     margin-left: 30px;
-    margin-top: 30px;
 }

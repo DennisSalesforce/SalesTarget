@@ -16,25 +16,8 @@
     font-weight : bolt;
 }
 
-.THIS .slds-tile__detail{
-  /*  flex box / inline block */
-    float: left;
-    width: 50%;
-}
-
-.THIS .test-right{
-    width: 50%;
-    float: left;
-}
-
-.THIS .slds-truncate{
-    width : 60% !important; 
-}
-
-
-.THIS .slds-media__body > div {
-    display: inline-block;
-    vertical-align: middle;
+.THIS .outer-div{
+  width: 90% !important;
 }
 
 .THIS .filters{
@@ -45,6 +28,34 @@
 
 .THIS .slds-show_inline-block{
     margin-left: 20px;
-    margin-top: 20px;
     margin-right: 20px;
+}
+
+.THIS .div-1{
+    height : 15px;
+    margin-right: 40px;
+}
+.THIS .div-2{
+    height : 15px;
+    margin-right: 35px;
+}
+
+.THIS .progress{
+    width : 75%;
+}
+
+.THIS .title-filter{
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.THIS .slds-media{
+    width : 80% !important;
+    margin-left: 20px;
+}
+
+.THIS .indexcolumn{
+    height : 30px;
+    vertical-align: baseline;
 }
