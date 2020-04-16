@@ -1,0 +1,19 @@
+.THIS .monthlyQuarterly{
+    width : 200px;
+}
+
+.THIS .outer-div{
+    margin-left : 20px;
+    margin-top : 20px;
+}
+
+.THIS .title{
+    margin-bottom: 15px;
+    font-weight: bolder;
+}
+
+.THIS .storeAwards{
+    margin-top : 15px;
+    margin-left : 25px;
+    margin-bottom : 10px;
+}

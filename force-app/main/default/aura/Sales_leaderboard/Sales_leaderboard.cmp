@@ -45,11 +45,11 @@
                     </div>
                   </div>
                   <div class="slds-show_inline-block">
-                    <div class="div-1">Remaning Days:</div>
+                    <!--<div class="div-1">Remaning Days:</div>-->
                     <div class="div-1">Progress:</div>
                   </div>
                   <div class="slds-show_inline-block">
-                    <div class="div-2">{!v.daysLeftInQuarter}</div>
+                    <!--<div class="div-2">{!v.daysLeftInQuarter}</div>-->
                     <div class="div-2">{!Sales.Target_percentage__c}%</div>
                   </div>
                 </div>

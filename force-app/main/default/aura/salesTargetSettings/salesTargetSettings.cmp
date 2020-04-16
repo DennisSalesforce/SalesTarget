@@ -1,0 +1,40 @@
+<aura:component controller="salesTargetSettings" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+<aura:attribute name="checkboxvalue" type="boolean"/> 
+<aura:attribute name="storeAwards" type="boolean"/> 
+<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <article class="slds-card">
+    <div class="outer-div">
+        <div class="title">Sales Target Settings:</div>
+
+        <div class="slds-m-around--large">
+            Fiscal settings:<br/>
+            <div class="slds-form-element">
+                <label class="slds-checkbox_toggle slds-grid">
+                    <span class="slds-form-element__label slds-m-bottom_none">Quarterly or Monthly: </span>
+                    <ui:inputCheckbox aura:id="checkboxvalue" class="slds-input" change="{!c.setMonthYear}" value="{!v.checkboxvalue}" />
+                    <span id="toggle-desc" class="slds-checkbox_faux_container" aria-live="assertive">
+                        <span class="slds-checkbox_faux"></span>
+                        <span class="slds-checkbox_on">Monthly</span>
+                        <span class="slds-checkbox_off">Quarterly</span>
+                    </span>
+                </label>
+            </div> 
+        </div> 
+        <div class="storeAwards">
+            User settings:<br/>
+            <div class="slds-form-element">
+                <label class="slds-checkbox_toggle slds-grid">
+                    <span class="slds-form-element__label slds-m-bottom_none">Store awards for users: </span>
+                    <ui:inputCheckbox aura:id="storeAwards" class="slds-input" value="{!v.storeAwards}" change="{!c.storeAwards}"/>
+                    <span id="toggle-desc" class="slds-checkbox_faux_container" aria-live="assertive">
+                        <span class="slds-checkbox_faux"></span>
+                        <span class="slds-checkbox_on">Enabled</span>
+                        <span class="slds-checkbox_off">Disabled</span>
+                    </span>
+                </label>
+            </div> 
+        </div>
+    </div>
+    </article>
+</aura:component>

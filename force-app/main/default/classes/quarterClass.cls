@@ -1,10 +1,32 @@
 public class quarterClass {
+
     @AuraEnabled
-    public static List<Quarter__mdt> getQuarterDates() {
+    public static List < Period > getQuarters() {
+        string typeValue;
+        list < Sales_Target_Settings__c > STS = [select monthly__c from Sales_Target_Settings__c where name = 'default setting'
+            limit 1
+        ];
 
-        list<Quarter__mdt> QuarterData = [select id, Start_date__c, End_date__c, DeveloperName from Quarter__mdt order by DeveloperName ASC];
+        for (Sales_Target_Settings__c SalesTarget: STS) {
+            if (SalesTarget.monthly__c == TRUE) {
+                typeValue = 'Month';
+            } else {
+                typeValue = 'Quarter';
+            }
+        }
+        system.debug(typeValue);
 
-        return QuarterData;
+        integer currentYear = date.today().year();
+        string startYear = currentYear + '-01-01';
+        string endYear = currentYear + '-12-31';
 
+        date start = Date.valueOf(startYear);
+        date last = Date.valueOf(endYear);
+        System.debug(start);
+        System.debug(last);
+        list<period>Periods = [select type, StartDate, EndDate from Period where type =: typeValue and StartDate >=: start and EndDate <=: last order by StartDate ASC];
+        System.debug(Periods);
+
+        return Periods;
     }
 }
