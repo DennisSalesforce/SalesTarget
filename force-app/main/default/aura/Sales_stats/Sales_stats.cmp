@@ -38,9 +38,9 @@
               <div class="div-2">{!v.daysLeftInQuarter}</div>
               <div class="div-2">{!Sales.Target_percentage__c}%</div>
             </div>
-            <div class="slds-show_inline-block">
+       <!--     <div class="slds-show_inline-block">
               <div class="div-3">#{!Sales.Position__c}/{!Sales.of_sales_targets__c}</div>
-            </div>
+            </div>-->
           </div>
           </article>
           <lightning:progressBar class="progress" value="{!Sales.Target_percentage__c}" />
