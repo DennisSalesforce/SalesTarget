@@ -5,20 +5,32 @@
   <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:attribute name="progress" type="Integer" default="0" />
   <aura:attribute name="daysLeftInQuarter" type="Integer" default="0" />
-  <aura:attribute name="filters" type="String" default="{}" />
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <aura:attribute name="sortBy" type="string" default="Target_percentage__c"/>
+  <aura:attribute name="filterByTeam" type="string" default="All"/>
+  <aura:attribute name="loading" type="boolean" default="TRUE"/>
   <article class="slds-card">
+    <aura:if isTrue="{! v.loading }">
+      <lightning:spinner alternativeText="Loading" size="large" />
+    </aura:if>
     <div class="title-filter">
       <div class="slds-text-title">
         <h1><b>Leaderboard: </b></h1>
       </div>
-      <div class="filters">
-        <lightning:select name="0Family" label="Filter by:" onchange="{! c.updateFilter }">
+        <div class="filters">
+        <lightning:select name="0Family" label="Sort by:" onchange="{! c.updateSort }" disabled="{! v.loading }">
           <option value="Target_percentage__c">Target percentage</option>
           <option value="Sales_to_date_this_quarter__c">Sales amount</option>
         </lightning:select>
       </div>
-    </div>
+      <div class="filters">
+        <lightning:select name="1Family" label="Sort by:" onchange="{! c.updateFilter }" disabled="{! v.loading }">
+          <option value="All">All teams</option>
+          <option value="Team A">Team A</option>
+          <option value="Team B">Team B</option>
+        </lightning:select>
+      </div>
+  </div>
     <div class="slds-card__body slds-card__body_inner">
       <aura:iteration items="{!v.SalesTarget}" var="Sales" indexVar="index">
         <div class="outer-div">

@@ -1,13 +1,15 @@
 ({
 	doInitHelper : function(component, event) {   
-       // var filter = component.get("v.filters");   
+        var filterByTeam = component.get("v.filterByTeam"); 
+        var sortBy = component.get("v.sortBy"); 
         var action = component.get("c.getAllSalesTargets");
-
+        action.setParams({sortBy : sortBy, filterByTeam : filterByTeam});
         action.setCallback(this, function(response){
             component.set("v.SalesTarget", response.getReturnValue());
+            component.set("v.loading", false);
         	console.log(response.getReturnValue());
-             });
-    		$A.enqueueAction(action);
+        });
+        $A.enqueueAction(action);
         
     },    
     onRender: function (cmp) {
@@ -30,13 +32,16 @@
     updateFilter: function(component, event){
         var filter = event.getSource().get('v.value');
 
-        var action = component.get("c.filterSalesTargets");
-        action.setParams({filter : filter});
-        action.setCallback(this, function(response){
-            component.set("v.SalesTarget", response.getReturnValue());
-        	console.log(response.getReturnValue());
-             });
-    		$A.enqueueAction(action);
-        
+        component.set("v.filterByTeam", filter);
+        component.set("v.loading", true);
+        this.doInitHelper(component);  
+    },
+
+    updateSort: function(component, event){
+        var filter = event.getSource().get('v.value');
+
+        component.set("v.sortBy", filter);
+        component.set("v.loading", true);
+        this.doInitHelper(component); 
     }
 })
