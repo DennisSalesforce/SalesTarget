@@ -22,7 +22,7 @@
           </div>
           <div class="slds-media__body">
             <h3 class="slds-tile__title slds-truncate" title="{!Sales.Sales_rep__r.Name}">
-              <a href="javascript:void(0);">{!Sales.Sales_rep__r.Name}</a>
+              <a href="{!'/lightning/r/User/'+ Sales.Sales_rep__r.Id +'/view'}">{!Sales.Sales_rep__r.Name}</a>
             </h3>
             <div class="slds-show_inline-block">
               <div class="div-1">Target: </div>

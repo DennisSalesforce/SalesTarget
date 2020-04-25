@@ -1,0 +1,47 @@
+.THIS .awards {
+    margin-top : 5px;
+    margin-left : 10px;
+    margin-bottom : 10px;
+    display: inline-block;
+    vertical-align: middle;
+    width : 100%
+}
+
+.THIS .title {
+    size : 16pt;
+    font-weight: bolder;
+    margin-bottom : 5px;
+    margin-left : 10px;
+    margin-top : 10px;
+}
+
+.THIS .award1{
+    height : 15px;
+    margin-right: 35px;
+    width: 45px;
+    margin-left : 10px;
+}
+
+.THIS .award2{
+    height : 15px;
+    margin-right: 35px;
+    width: 45px;
+}
+
+.THIS .award3{
+    height : 15px;
+    margin-right: 35px;
+    width: 45px;
+}
+
+.THIS .award4{
+    height : 15px;
+    margin-right: 35px;
+    width: 45px;
+}
+
+.THIS .medal{
+    height : 25px;
+    width : 25px;
+    margin-right : 5px;
+}

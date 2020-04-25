@@ -43,5 +43,14 @@
         component.set("v.sortBy", filter);
         component.set("v.loading", true);
         this.doInitHelper(component); 
+    },
+
+    doInitGetSalesTeam: function(component, event) {      
+        var action = component.get("c.getSalesTeam");
+        action.setCallback(this, function(response){
+            component.set("v.SalesTeam", response.getReturnValue());
+        	console.log(response.getReturnValue());
+             });
+            $A.enqueueAction(action);
     }
 })

@@ -74,7 +74,7 @@ public class salesTargetSettings {
         
         list<AggregateResult> toBeUpdateOpps = new list<AggregateResult>();
         list<sales_target__c> toBeUpdateST = new list<sales_target__c>();
-        toBeUpdateST = [select id, Sales_to_date_this_quarter__c, Sales_rep__c from Sales_target__c];
+        toBeUpdateST = [select id, Sales_to_date_this_quarter__c, Sales_rep__c, Target_preferences__c from Sales_target__c];
         
         IF (updatedValue == TRUE){
         toBeUpdateOpps = [select sum(amount), ownerid from opportunity 
@@ -102,13 +102,16 @@ public class salesTargetSettings {
                 id ownerid = (id)arr.get('ownerid');
                 decimal totalAmount = (Decimal)arr.get('expr0');
                 sales_target__c STfinal = (sales_target__c)STMap.get(ownerid);
-                STfinal.Sales_to_date_this_quarter__c = totalAmount;}
+                STfinal.Sales_to_date_this_quarter__c = totalAmount;
+                STfinal.Target_preferences__c = 'Monthly';
+            }
          }else{
             for(AggregateResult arr : toBeUpdateOpps){
                 id ownerid = (id)arr.get('ownerid');
                 decimal totalAmount = (Decimal)arr.get('expr0');
                 sales_target__c STfinal = (sales_target__c)STMap.get(ownerid);
-                STfinal.Sales_to_date_this_quarter__c = totalAmount;}
+                STfinal.Sales_to_date_this_quarter__c = totalAmount;
+                STfinal.Target_preferences__c = 'Quarterly';}
         }
 
         update STMap.values();

@@ -19,7 +19,7 @@ public class Sales_stats {
         
 
         string querystr = '';
-        querystr += 'SELECT Id, Sales_team__c, icon__c,of_sales_targets__c,Position__c, Target_this_quarter__c, Target_percentage__c,Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c';
+        querystr += 'SELECT Id, Sales_Team__c, Sales_Team__r.Name, icon__c,of_sales_targets__c,Position__c, Target_this_quarter__c, Target_percentage__c,Sales_rep__r.Name,Sales_rep__r.Id, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c';
         if(filterByTeam != 'All'){
             querystr+= ' WHERE Sales_team__r.name = \'' + filterByTeam + '\'';
         }
@@ -50,6 +50,13 @@ public class Sales_stats {
         
     }
 
+    @auraenabled
+    public static list<sales_team__c> getSalesTeam(){
+        list<sales_team__c> SalesTeams = [SELECT Id, name FROM Sales_team__c order by name ASC];
+        system.debug('Sales Teams' + SalesTeams);
+        return SalesTeams;
+        
+    }    
     
     
     @AuraEnabled

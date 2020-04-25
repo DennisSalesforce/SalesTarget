@@ -2,6 +2,7 @@
   implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
   access="global">
   <aura:attribute name="SalesTarget" type="Sales_target__c[]" />
+  <aura:attribute name="SalesTeam" type="Sales_team__c[]" />
   <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:attribute name="progress" type="Integer" default="0" />
   <aura:attribute name="daysLeftInQuarter" type="Integer" default="0" />
@@ -9,6 +10,8 @@
   <aura:attribute name="sortBy" type="string" default="Target_percentage__c"/>
   <aura:attribute name="filterByTeam" type="string" default="All"/>
   <aura:attribute name="loading" type="boolean" default="TRUE"/>
+
+
   <article class="slds-card">
     <aura:if isTrue="{! v.loading }">
       <lightning:spinner alternativeText="Loading" size="large" />
@@ -17,17 +20,18 @@
       <div class="slds-text-title">
         <h1><b>Leaderboard: </b></h1>
       </div>
-        <div class="filters">
+        <div class="slds-show_inline-block">
         <lightning:select name="0Family" label="Sort by:" onchange="{! c.updateSort }" disabled="{! v.loading }">
           <option value="Target_percentage__c">Target percentage</option>
           <option value="Sales_to_date_this_quarter__c">Sales amount</option>
         </lightning:select>
       </div>
-      <div class="filters">
-        <lightning:select name="1Family" label="Sort by:" onchange="{! c.updateFilter }" disabled="{! v.loading }">
+      <div class="slds-show_inline-block">
+        <lightning:select name="1Family" onchange="{! c.updateFilter }" disabled="{! v.loading }">
           <option value="All">All teams</option>
-          <option value="Team A">Team A</option>
-          <option value="Team B">Team B</option>
+          <aura:iteration items="{!v.SalesTeam}" var="Team" indexVar="index">
+          <option value="{!Team.Name}">{!Team.Name}</option>
+        </aura:iteration>
         </lightning:select>
       </div>
   </div>
@@ -37,12 +41,12 @@
               <article class="slds-tile slds-media">
                 <div class="slds-media__figure">
                   <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
-                    <img alt="" src="{!Sales.icon__c}" title="{!Sales.Sales_rep__r.Name}" />
+                    <img alt="{!'/lightning/r/User/'+ Sales.Sales_rep__r.Id +'/view'}" src="{!Sales.icon__c}" title="{!Sales.Sales_rep__r.Name}" />
                   </span>
                 </div>
                 <div class="slds-media__body">
                   <h3 class="slds-tile__title slds-truncate" title="{!Sales.Sales_rep__r.Name}">
-                    <a href="javascript:void(0);">{!Sales.Sales_rep__r.Name}</a>
+                    <a href="{!'/lightning/r/User/'+ Sales.Sales_rep__r.Id +'/view'}">{!Sales.Sales_rep__r.Name}</a>
                   </h3>
                   <div class="slds-show_inline-block">
                     <div class="div-1">Target: </div>
@@ -57,11 +61,11 @@
                     </div>
                   </div>
                   <div class="slds-show_inline-block">
-                    <!--<div class="div-1">Remaning Days:</div>-->
+                    <div class="div-1">Team:</div>
                     <div class="div-1">Progress:</div>
                   </div>
                   <div class="slds-show_inline-block">
-                    <!--<div class="div-2">{!v.daysLeftInQuarter}</div>-->
+                    <div class="div-2">{!Sales.Sales_Team__r.Name}</div>
                     <div class="div-2">{!Sales.Target_percentage__c}%</div>
                   </div>
                 </div>
@@ -72,5 +76,6 @@
       </aura:iteration>
     </div>
   </article>
+
 
 </aura:component>
