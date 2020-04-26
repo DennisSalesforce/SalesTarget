@@ -2,6 +2,7 @@
   implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
   access="global">
   <aura:attribute name="runningUserId" type="string" />
+  <aura:attribute name="showAwards" type="Boolean"/>
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
   <aura:attribute name="SalesTarget" type="Sales_target__c[]" />
   <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
@@ -43,6 +44,7 @@
           </div>
           </article>
           <lightning:progressBar class="progress" value="{!Sales.Target_percentage__c}" />
+          <aura:if isTrue="{!v.showAwards}">
           <div class="awards">
             <div class="slds-show_inline-block">
               <div class="award1">
@@ -73,6 +75,7 @@
               </div>
             </div> 
           </div>
+        </aura:if>
       </div>
     </aura:iteration>
     </div>

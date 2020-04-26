@@ -39,5 +39,14 @@
              });
     		$A.enqueueAction(action);
 
-    }
+    },
+    
+    showAwards : function(component, event) {
+		var action = component.get("c.currentAwardShowSetting");
+		action.setCallback(this, function(response){
+            component.set("v.showAwards", response.getReturnValue());
+        	console.log(response.getReturnValue());
+             });
+    		$A.enqueueAction(action);
+	}
 })

@@ -13,6 +13,19 @@ public class salesTargetSettings {
     }
 
     @AuraEnabled
+    public static boolean currentAwardShowSetting(){
+        boolean setting;
+        Sales_Target_Settings__c STS = [select Show_awards__c from Sales_Target_Settings__c where name = 'Default setting'
+        limit 1
+    ];
+        
+            setting = STS.Show_awards__c;
+
+            return setting;
+
+    }
+
+    @AuraEnabled
     public static boolean currentAwardSetting(boolean storeAwards){
         boolean setting;
         Sales_Target_Settings__c STS = [select Store_awards__c from Sales_Target_Settings__c where name = 'Default setting'
@@ -27,6 +40,7 @@ public class salesTargetSettings {
 
     @AuraEnabled
     public static boolean updateMonthlySettings(boolean monthly){
+        System.debug('MONTHLY'+ monthly);
         list <Sales_Target_Settings__c> STS = [select monthly__c from Sales_Target_Settings__c where name = 'Default setting'
         limit 1
     ];
@@ -38,6 +52,28 @@ public class salesTargetSettings {
 
         } else {
             Salestarget.monthly__c = FALSE;
+            updatedValue = FALSE;
+        }
+    }
+        System.debug(STS);
+        update STS;
+        return updatedValue;
+    }
+
+    @AuraEnabled
+    public static boolean updateShowAward(boolean showAwards){
+        System.debug('value before query '+ showAwards);
+        list <Sales_Target_Settings__c> STS = [select Show_awards__c from Sales_Target_Settings__c where name = 'Default setting'
+        limit 1
+    ];
+        boolean updatedValue;
+    for(Sales_Target_Settings__c SA : STS){
+        if(showAwards == TRUE){
+            SA.Show_awards__c = TRUE;
+            updatedValue = TRUE;
+
+        } else {
+            SA.Show_awards__c = FALSE;
             updatedValue = FALSE;
         }
     }

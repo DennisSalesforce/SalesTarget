@@ -89,4 +89,17 @@ public class Sales_stats {
         return allMedals;
     }
 
+    @AuraEnabled
+    public static boolean currentAwardShowSetting(){
+        boolean setting;
+        Sales_Target_Settings__c STS = [select Show_awards__c from Sales_Target_Settings__c where name = 'Default setting'
+        limit 1
+    ];
+        
+            setting = STS.Show_awards__c;
+
+            return setting;
+
+    }
+
 }
