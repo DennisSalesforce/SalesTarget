@@ -112,18 +112,24 @@ public class salesTargetSettings {
         list<sales_target__c> toBeUpdateST = new list<sales_target__c>();
         toBeUpdateST = [select id, Sales_to_date_this_quarter__c, Sales_rep__c, Target_preferences__c from Sales_target__c];
         
+        for(sales_target__c S : toBeUpdateST){
+            S.Sales_to_date_this_quarter__c = 0;
+        }
+        update toBeUpdateST;
+
         IF (updatedValue == TRUE){
         toBeUpdateOpps = [select sum(amount), ownerid from opportunity 
                             WHERE StageName = 'Closed Won'  
                             AND closeDate = THIS_MONTH
                             group by ownerid];
-                        } else {
+                        } 
+        IF (updatedValue == FALSE){
         toBeUpdateOpps = [select sum(amount), ownerid from opportunity 
                         WHERE StageName = 'Closed Won'  
                         AND closeDate = THIS_QUARTER
                         group by ownerid];                 
                     }
-
+                    System.debug('opps list' + toBeUpdateOpps);
         map<id, Decimal> OppMap = new map<id, Decimal>();
         map<id, sales_target__c> STMap = new map<id,sales_target__c>();
 
@@ -140,6 +146,7 @@ public class salesTargetSettings {
                 sales_target__c STfinal = (sales_target__c)STMap.get(ownerid);
                 STfinal.Sales_to_date_this_quarter__c = totalAmount;
                 STfinal.Target_preferences__c = 'Monthly';
+                System.debug('STFINAL' + STfinal);
             }
          }else{
             for(AggregateResult arr : toBeUpdateOpps){
@@ -152,8 +159,8 @@ public class salesTargetSettings {
 
         update STMap.values();
         
-        System.debug(STMap);
-        System.debug(OppMap);
+        System.debug('STMAP' + STMap);
+        System.debug('OPPMAP' + OppMap);
         return updatedValue;
     }
 

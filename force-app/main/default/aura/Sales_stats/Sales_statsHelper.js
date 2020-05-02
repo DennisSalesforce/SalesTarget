@@ -48,5 +48,41 @@
         	console.log(response.getReturnValue());
              });
     		$A.enqueueAction(action);
-	}
+    },
+    
+    showWonAwardsHelper :  function(component, event) {
+        var userid = $A.get("$SObjectType.CurrentUser.Id");
+        var action = component.get("c.getWonAwards");
+        action.setParams({userid : userid});
+		action.setCallback(this, function(response){
+            component.set("v.wonAwards", response.getReturnValue());
+            component.set("v.showWonAwards", true);
+        	console.log(response.getReturnValue());
+             });
+    		$A.enqueueAction(action);
+    },
+    closeShowWonAwardsHelper :  function(component, event) {
+    
+            component.set("v.showWonAwards", false);
+          
+    		$A.enqueueAction(action);
+    },
+    closeWonWonOppsHelper :  function(component, event) {
+    
+        component.set("v.showWonOpps", false);
+      
+        $A.enqueueAction(action);
+    },
+    
+    getWonWonOppsHelper :  function(component, event) {
+        var userid = $A.get("$SObjectType.CurrentUser.Id");
+        var action = component.get("c.getWonOpps");
+        action.setParams({userid : userid});
+		action.setCallback(this, function(response){
+            component.set("v.wonOpps", response.getReturnValue());
+            component.set("v.showWonOpps", true);
+        	console.log(response.getReturnValue());
+             });
+    		$A.enqueueAction(action);
+    }
 })

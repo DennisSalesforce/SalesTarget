@@ -95,3 +95,32 @@
     width : 25px;
     margin-right : 5px;
 }
+
+.THIS .awardsWon1{
+    margin-top : 10px;
+    margin-bottom : 5px;
+}
+
+.THIS .awardNameHistory{
+    margin-left: 7px;
+}
+
+.THIS .close{
+    text-align: right;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+}
+
+.THIS .oppsWon1{
+    margin-top : 10px;
+    margin-bottom : 5px;
+}
+
+.THIS .OppStageName{
+    margin-left: 7px;
+}
+
+.THIS .OppName{
+    margin-right: 10px;;
+}

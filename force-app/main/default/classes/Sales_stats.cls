@@ -7,6 +7,12 @@ public class Sales_stats {
     @AuraEnabled public Decimal hundredMedal = 0;
 }
 
+public class wonAwards{
+    @AuraEnabled public string icon;
+    @AuraEnabled public string nameAward;
+    @AuraEnabled public string nameAwardHistory;
+}
+
 	@auraenabled
     public static list<sales_target__c> getSalesTarget(id userid){
         list<sales_target__c> ST = [SELECT Id, icon__c, of_sales_targets__c, Position__c,Target_this_quarter__c, Target_percentage__c,Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c WHERE Sales_rep__c = :userid];
@@ -33,10 +39,21 @@ public class Sales_stats {
 
     @auraenabled
     public static integer daysLeftInQuarter(){
+        period P = new period();
         date today = system.today();
-        quarter__mdt Quarter = [select end_date__c from quarter__mdt where start_date__c < today and end_date__c > today];
+        //quarter__mdt Quarter = [select end_date__c from quarter__mdt where start_date__c < today and end_date__c > today];
 
-        integer daysLeft = today.daysBetween(Quarter.end_date__c);
+        Sales_Target_Settings__c STS = [select monthly__c from Sales_Target_Settings__c where name = 'Default setting'limit 1];
+
+        if(STS.Monthly__c == TRUE){
+            P = [select StartDate, EndDate, type from period where type = 'Month' and StartDate <= today and EndDate >= today ];
+        } 
+        if(STS.Monthly__c == FALSE){
+            P = [select StartDate, EndDate, type from period where type = 'Quarter' and StartDate <= today and EndDate >= today ];
+        }
+        
+
+        integer daysLeft = today.daysBetween(P.EndDate);
 
         return daysLeft;
 
@@ -99,6 +116,42 @@ public class Sales_stats {
             setting = STS.Show_awards__c;
 
             return setting;
+
+    }
+
+    @AuraEnabled
+    public static list<object> getWonAwards(id userid){
+        list<object> awardList = new list<object>();
+        list<Sales_Award_History__c> wonAward = [select Sales_award__r.Name, Sales_award__r.icon__c, name, user__r.name from Sales_Award_History__c where user__c = :userid limit 5];
+        
+        for(Sales_Award_History__c SaAwHi : wonAward){
+            wonAwards allMedals = new wonAwards();  
+            allMedals.icon = SaAwHi.Sales_award__r.icon__c;
+            allMedals.nameAward = SaAwHi.Sales_award__r.Name;
+            allMedals.nameAwardHistory = SaAwHi.name;
+            awardList.add(allMedals);
+        }
+
+        System.debug('SALES AWARD WON HISTORY' + awardList);
+        return awardList;
+
+    }
+
+    @AuraEnabled
+    public static list<opportunity> getWonOpps(id userid){
+        
+        list<opportunity> wonOpps = new list<opportunity>();
+        Sales_Target_Settings__c STS = [select monthly__c from Sales_Target_Settings__c where name = 'Default setting'limit 1];
+
+        if(STS.Monthly__c == TRUE){
+            wonOpps = [select name, amount, stagename, closedate from opportunity where ownerid = :userid and StageName = 'Closed Won' and closeDate = THIS_MONTH limit 5];
+        } 
+        if(STS.Monthly__c == FALSE){
+            wonOpps = [select name, amount, stagename, closedate from opportunity where ownerid = :userid and StageName = 'Closed Won' and closeDate = THIS_QUARTER limit 5];
+        }
+
+        System.debug('WON OPPS' + wonOpps);
+        return wonOpps;
 
     }
 

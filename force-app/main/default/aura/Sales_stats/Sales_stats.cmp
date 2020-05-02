@@ -3,13 +3,17 @@
   access="global">
   <aura:attribute name="runningUserId" type="string" />
   <aura:attribute name="showAwards" type="Boolean"/>
-  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <aura:attribute name="showWonAwards" type="Boolean" default="FALSE"/>
+  <aura:attribute name="showWonOpps" type="Boolean" default="FALSE"/>
   <aura:attribute name="SalesTarget" type="Sales_target__c[]" />
+  <aura:attribute name="wonOpps" type="Opportunity[]" />
   <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:attribute name="progress" type="Integer" default="0" />
   <aura:attribute name="daysLeftInQuarter" type="Integer" default="0" />
   <aura:attribute name="activeSections" type="List" default="[]" />
   <aura:attribute name="awards" type="Object" />
+  <aura:attribute name="wonAwards" type="Object[]" />
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
 
   <article class="slds-card">
     <div class="slds-card__body slds-card__body_inner">
@@ -31,7 +35,7 @@
             </div>
             <div class="slds-show_inline-block">
               <div class="div-2">€ <lightning:formattedNumber value="{!Sales.Target_this_quarter__c}"/></div>
-              <div class="div-2">€ <lightning:formattedNumber value="{!Sales.Sales_to_date_this_quarter__c}"/></div>
+              <div class="div-2"><a onclick="{!c.onClickShowOpps}">€ <lightning:formattedNumber value="{!Sales.Sales_to_date_this_quarter__c}"/></a></div>
             </div>
             <div class="slds-show_inline-block">
               <div class="div-1">Remaning Days:</div>
@@ -45,35 +49,69 @@
           </article>
           <lightning:progressBar class="progress" value="{!Sales.Target_percentage__c}" />
           <aura:if isTrue="{!v.showAwards}">
-          <div class="awards">
+          <div class="awards" onclick="{!c.onclick}">
             <div class="slds-show_inline-block">
               <div class="award1">
-                <div class="left"><img src="/resource/1586526789000/numbr1" class="medal" /> 
+                <div class="left"><a onclick="{!c.onClick}"><img src="/resource/1586526789000/numbr1" class="medal" /> </a>
                   {! v.awards.goldMedal }x
                 </div>
               </div>
             </div> 
-            <div class="slds-show_inline-block">
+            <div class="slds-show_inline-block" >
               <div class="award2">
-                <div class="left"><img src="/resource/1586526789000/numbr2" class="medal" />
+                <div class="left"><a onclick="{!c.onClick}"><img src="/resource/1586526789000/numbr2" class="medal" /></a>
                   {! v.awards.silverMedal }x
                   </div>
               </div>
             </div> 
-            <div class="slds-show_inline-block">
+            <div class="slds-show_inline-block" >
               <div class="award3">
-                <div class="left"><img src="/resource/1586526789000/nmbr3" class="medal" /> 
+                <div class="left"><a onclick="{!c.onClick}"><img src="/resource/1586526789000/nmbr3" class="medal"/> </a>
                   {! v.awards.bronzeMedal }x
               </div>
               </div>
             </div> 
-            <div class="slds-show_inline-block">
+            <div class="slds-show_inline-block" >
               <div class="award4">
-                <div class="left"><img src="/resource/1587402504000/completion_medal" class="medal" /> 
+                <div class="left"><a onclick="{!c.onClick}"><img src="/resource/1587402504000/completion_medal" class="medal" /> </a>
                   {! v.awards.hundredMedal }x
                 </div>
               </div>
             </div> 
+          </div>
+        </aura:if>
+        
+        <aura:if isTrue="{!v.showWonAwards}">
+          <div class="awardsWon">
+              <div class="awardsWon1">
+                <div class="slds-show_inline-block"><b>These are all the won awards</b></div>
+                <div class="slds-show_inline-block"><div class="close"><a onclick="{!c.onClickClose}"><b>close</b></a></div></div>
+                  <div class="awardsWon2">
+                    <aura:iteration items="{!v.wonAwards}" var="awards">
+                      <div class="slds-show_inline-block"><div class="awardIcon"><img src="{!awards.icon}" class="medal" /></div></div>
+                      <div class="slds-show_inline-block"><div class="awardName">{!awards.nameAward}</div></div>
+                      <div class="slds-show_inline-block"><div class="awardNameHistory">{!awards.nameAwardHistory}</div></div><br/>
+                      </aura:iteration>
+                  </div>
+
+              </div>
+          </div>
+        </aura:if>
+        <aura:if isTrue="{!v.showWonOpps}">
+          <div class="oppsWon">
+              <div class="oppsWon1">
+                <div class="slds-show_inline-block"><b>These are your last 5 closed won Opportunities</b></div>
+                <div class="slds-show_inline-block"><div class="close"><a onclick="{!c.closeShowOpps}"><b>close</b></a></div></div>
+                  <div class="oppsWon2">
+                    <aura:iteration items="{!v.wonOpps}" var="opp">
+                      <div class="slds-show_inline-block"><div class="OppName">{!opp.Name}</div></div>
+                      <div class="slds-show_inline-block"><div class="OppAmount">€ {!opp.Amount}</div></div>
+                      <div class="slds-show_inline-block"><div class="OppStageName"> {!opp.StageName}</div></div>
+                      <div class="slds-show_inline-block"><div class="OppStageName"> {!opp.CloseDate}</div></div><br/>
+                      </aura:iteration>
+                  </div>
+
+              </div>
           </div>
         </aura:if>
       </div>
