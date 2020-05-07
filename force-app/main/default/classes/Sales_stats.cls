@@ -144,10 +144,10 @@ public class wonAwards{
         Sales_Target_Settings__c STS = [select monthly__c from Sales_Target_Settings__c where name = 'Default setting'limit 1];
 
         if(STS.Monthly__c == TRUE){
-            wonOpps = [select name, amount, stagename, closedate from opportunity where ownerid = :userid and StageName = 'Closed Won' and closeDate = THIS_MONTH limit 5];
+            wonOpps = [select name, id, amount, stagename, closedate from opportunity where ownerid = :userid and StageName = 'Closed Won' and closeDate = THIS_MONTH limit 5];
         } 
         if(STS.Monthly__c == FALSE){
-            wonOpps = [select name, amount, stagename, closedate from opportunity where ownerid = :userid and StageName = 'Closed Won' and closeDate = THIS_QUARTER limit 5];
+            wonOpps = [select name, id, amount, stagename, closedate from opportunity where ownerid = :userid and StageName = 'Closed Won' and closeDate = THIS_QUARTER limit 5];
         }
 
         System.debug('WON OPPS' + wonOpps);
