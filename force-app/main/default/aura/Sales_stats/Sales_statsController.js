@@ -10,8 +10,17 @@
     	helper.onRender(component, event);
 	},
 
-	onClick : function(component,event,helper){	
-		helper.showWonAwardsHelper(component, event); 
+	onClickGold : function(component,event,helper){	
+		helper.showWonAwardsGoldHelper(component, event); 
+	},
+	onClickSilver : function(component,event,helper){	
+		helper.showWonAwardsSilverHelper(component, event); 
+	},
+	onClickBronze : function(component,event,helper){	
+		helper.showWonAwardsBronzeHelper(component, event); 
+	},
+	onClickHundred : function(component,event,helper){	
+		helper.showWonAwardsHundredHelper(component, event); 
 	},
 
 	onClickClose : function(component,event,helper){	

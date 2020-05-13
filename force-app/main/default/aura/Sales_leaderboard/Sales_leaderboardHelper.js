@@ -1,7 +1,7 @@
 ({
-	doInitHelper : function(component, event) {   
-        var filterByTeam = component.get("v.filterByTeam"); 
-        var sortBy = component.get("v.sortBy"); 
+	doInitHelper : function(component, event) {
+        var filterByTeam = component.get("v.filterByTeam");
+        var sortBy = component.get("v.sortBy");
         var action = component.get("c.getAllSalesTargets");
         action.setParams({sortBy : sortBy, filterByTeam : filterByTeam});
         action.setCallback(this, function(response){
@@ -10,23 +10,23 @@
         	console.log(response.getReturnValue());
         });
         $A.enqueueAction(action);
-        
-    },    
+
+    },
     onRender: function (cmp) {
-        var interval = setInterval($A.getCallback(function () {
-            var progress = cmp.get('v.progress');
-            cmp.set('v.progress', progress === 100 ? clearInterval(interval) : progress + 10);
-        }), 200);
+        // var interval = setInterval($A.getCallback(function () {
+        //     var progress = cmp.get('v.progress');
+        //     cmp.set('v.progress', progress === 100 ? clearInterval(interval) : progress + 10);
+        // }), 200);
     },
 
-    doInitDaysLeft : function(component, event) {      
+    doInitDaysLeft : function(component, event) {
         var action = component.get("c.daysLeftInQuarter");
         action.setCallback(this, function(response){
             component.set("v.daysLeftInQuarter", response.getReturnValue());
         	console.log(response.getReturnValue());
              });
     		$A.enqueueAction(action);
-        
+
     },
 
     updateFilter: function(component, event){
@@ -34,7 +34,7 @@
 
         component.set("v.filterByTeam", filter);
         component.set("v.loading", true);
-        this.doInitHelper(component);  
+        this.doInitHelper(component);
     },
 
     updateSort: function(component, event){
@@ -42,10 +42,10 @@
 
         component.set("v.sortBy", filter);
         component.set("v.loading", true);
-        this.doInitHelper(component); 
+        this.doInitHelper(component);
     },
 
-    doInitGetSalesTeam: function(component, event) {      
+    doInitGetSalesTeam: function(component, event) {
         var action = component.get("c.getSalesTeam");
         action.setCallback(this, function(response){
             component.set("v.SalesTeam", response.getReturnValue());
