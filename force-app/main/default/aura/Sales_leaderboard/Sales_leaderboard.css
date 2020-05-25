@@ -1,61 +1,101 @@
-.THIS .percentage{
-    Font-size : 26px;
-    font-weight : bolt;
+.THIS .slds-progress-bar_medium {
+    height: 14px !important;
+    margin: 6px 0 !important;
 }
 
-.THIS .imgCls{
-    width:35px;
-    height:35px;
+.THIS .slds-progress-bar__value {
+    background: repeating-linear-gradient(225deg,
+            rgb(0, 161, 224),
+            rgb(0, 161, 224) 10px,
+            #465298 10px,
+            #465298 20px) !important;
+}
+
+.THIS hr {
+    margin: 16px 0;
+}
+
+.THIS .leaderboard-container{
+    display: flex;
+    margin-bottom: 24px;
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+.THIS .leaderboard-container > *{
+    flex: auto 0 0;
+    margin: 0 8px;
+}
+
+.THIS .leaderboard-container .profile-container{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.THIS .leaderboard-container .profile-container > div{
+    flex: auto 0 0;
+}
+
+.THIS .leaderboard-container .profile-container .user-stats{
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+}
+
+.THIS .leaderboard-container .profile-container .user-stats > div{
+    flex: auto 0 0;
+}
+
+.THIS .leaderboard-container .profile-container .user-stats .user-name{
+    flex-basis: 180px !important;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.THIS .profile-image > img{
+    border-radius: 100%;
+    width: 54px;
+    height: 54px;
+    margin: 5px 0;
+}
+
+.THIS .percentage {
+    font-size: 26px;
+    font-weight: bolt;
+}
+
+.THIS .imgCls {
+    width: 35px;
+    height: 35px;
     margin-left: auto;
     margin-right: auto;
     display: block;
 }
 
-.THIS .title{
-    Font-size : 16px;
-    font-weight : bolt;
+.THIS .filters {
+    display: flex;
 }
 
-.THIS .outer-div{
-  width: 90% !important;
+.THIS .filters > * {
+    flex: auto 0 0;
+    margin-right: 12px;
 }
 
-.THIS .filters{
-    width : 25%;
-    margin-bottom: 20px;
-    
+
+/* User Medals */
+.THIS .awards {
+    display: flex;
+    align-content: center;
+    margin: 0 -6px;
 }
 
-.THIS .slds-show_inline-block{
-    margin-left: 20px;
-    margin-right: 20px;
+.THIS .awards > div {
+    flex: auto 0 0;
+    margin: 0 6px;;
 }
 
-.THIS .div-1{
-    height : 15px;
-    margin-right: 40px;
-}
-.THIS .div-2{
-    height : 15px;
-    margin-right: 35px;
-}
-
-.THIS .progress{
-    width : 75%;
-}
-
-.THIS .title-filter{
-    margin-left: 20px;
-    margin-top: 20px;
-    margin-bottom: 15px;
-}
-
-.THIS .slds-media{
-    width : 80% !important;
-    margin-left: 20px;
-}
-
-.THIS .indexcolumn{
-    height : 30px;
-    vertical-align: baseline !important;
+.THIS .medal {
+    height: 28px;
+    width: 28px;
 }

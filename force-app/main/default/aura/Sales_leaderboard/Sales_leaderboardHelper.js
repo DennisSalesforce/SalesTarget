@@ -2,10 +2,10 @@
 	doInitHelper : function(component, event) {
         var filterByTeam = component.get("v.filterByTeam");
         var sortBy = component.get("v.sortBy");
-        var action = component.get("c.getAllSalesTargets");
+        var action = component.get("c.getLeaderboardStats");
         action.setParams({sortBy : sortBy, filterByTeam : filterByTeam});
         action.setCallback(this, function(response){
-            component.set("v.SalesTarget", response.getReturnValue());
+            component.set("v.LeaderboardStats", response.getReturnValue());
             component.set("v.loading", false);
         	console.log(response.getReturnValue());
         });

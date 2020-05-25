@@ -1,81 +1,118 @@
 <aura:component controller="Sales_stats"
   implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
   access="global">
-  <aura:attribute name="SalesTarget" type="Sales_target__c[]" />
+
+  <aura:attribute name="LeaderboardStats" type="List" />
   <aura:attribute name="SalesTeam" type="Sales_Team__c[]" />
-  <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:attribute name="progress" type="Integer" default="0" />
   <aura:attribute name="daysLeftInQuarter" type="Integer" default="0" />
+  <aura:attribute name="sortBy" type="string" default="Target_percentage__c" />
+  <aura:attribute name="filterByTeam" type="string" default="All" />
+  <aura:attribute name="loading" type="boolean" default="TRUE" />
+
+  <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-  <aura:attribute name="sortBy" type="string" default="Target_percentage__c"/>
-  <aura:attribute name="filterByTeam" type="string" default="All"/>
-  <aura:attribute name="loading" type="boolean" default="TRUE"/>
 
+  <lightning:card title="Leaderboard" iconName="standard:lightning_usage">
+    <div class="slds-card__body_inner">
 
-  <article class="slds-card">
-    <aura:if isTrue="{! v.loading }">
-      <lightning:spinner alternativeText="Loading" size="large" />
-    </aura:if>
-    <div class="title-filter">
-      <div class="slds-text-title">
-        <h1><b>Leaderboard: </b></h1>
-      </div>
-        <div class="slds-show_inline-block">
+      <!-- Loading icon -->
+      <aura:if isTrue="{! v.loading }">
+        <lightning:spinner alternativeText="Loading" size="large" />
+      </aura:if>
+
+      <div class="filters">
         <lightning:select name="0Family" label="Sort by:" onchange="{! c.updateSort }" disabled="{! v.loading }">
           <option value="Target_percentage__c">Target percentage</option>
           <option value="Sales_to_date_this_quarter__c">Sales amount</option>
         </lightning:select>
-      </div>
-      <div class="slds-show_inline-block">
-        <lightning:select name="1Family" onchange="{! c.updateFilter }" disabled="{! v.loading }">
+
+        <lightning:select name="1Family" label="Team:" onchange="{! c.updateFilter }" disabled="{! v.loading }">
           <option value="All">All teams</option>
           <aura:iteration items="{!v.SalesTeam}" var="Team" indexVar="index">
-          <option value="{!Team.Name}">{!Team.Name}</option>
-        </aura:iteration>
+            <option value="{!Team.Name}">{!Team.Name}</option>
+          </aura:iteration>
         </lightning:select>
+        Days Remaining:<br/>{!v.daysLeftInQuarter}
       </div>
-  </div>
-    <div class="slds-card__body slds-card__body_inner">
-      <aura:iteration items="{!v.SalesTarget}" var="Sales" indexVar="index">
-        <div class="outer-div">
-              <article class="slds-tile slds-media">
-                <div class="slds-media__figure">
-                  <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
-                    <img alt="{!'/lightning/r/User/'+ Sales.Sales_rep__r.Id +'/view'}" src="{!Sales.icon__c}" title="{!Sales.Sales_rep__r.Name}" />
-                  </span>
+
+
+      <hr />
+
+      <aura:iteration items="{! v.LeaderboardStats }" var="stats" indexVar="index">
+        <div class="leaderboard-container">
+
+          <!-- Left side Profile Image -->
+          <div class="profile-image">
+            <img alt="Profile" src="{! stats.imageUrl }" title="{! stats.name }" />
+          </div>
+
+          <!-- Old image -->
+          <!-- <div class="slds-media__figure">
+            <span class="slds-avatar slds-avatar_circle slds-avatar_medium">
+              <img alt="{!'/lightning/r/User/'+ stats.Sales_rep__r.Id +'/view'}" src="{!stats.icon__c}"
+                title="{!stats.Sales_rep__r.Name}" />
+            </span>
+          </div> -->
+
+          <!-- Right side stats -->
+          <div class="profile-container">
+            <div class="user-stats">
+
+              <div class="user-name" >
+                <small style="color:darkslategray">{! stats.teamName }</small>
+                <br />
+                <b>{! stats.name }</b>
+              </div>
+
+              <!-- Number stats -->
+              <div style="display:flex">
+                <div style="margin-right: 6px;">
+                  Target:<br />
+                  Sales:
                 </div>
-                <div class="slds-media__body">
-                  <h3 class="slds-tile__title slds-truncate" title="{!Sales.Sales_rep__r.Name}">
-                    <a href="{!'/lightning/r/User/'+ Sales.Sales_rep__r.Id +'/view'}">{!Sales.Sales_rep__r.Name}</a>
-                  </h3>
-                  <div class="slds-show_inline-block">
-                    <div class="div-1">Target: </div>
-                    <div class="div-1">Sales:</div>
+                <div>
+                  <b>€ <lightning:formattedNumber value="{! stats.target }" /></b><br />
+                  <b>€ <lightning:formattedNumber value="{! stats.salesToDate }" /></b>
+                </div>
+              </div>
+
+              <!-- Awards row -->
+              <aura:if isTrue="{! stats.showAwards }">
+                <div class="awards">
+                  <div>
+                    <img src="/resource/1586526789000/numbr1" class="medal" />
+                    {! stats.medals.goldMedal }x
                   </div>
-                  <div class="slds-show_inline-block">
-                    <div class="div-2">€
-                      <lightning:formattedNumber value="{!Sales.Target_this_quarter__c}" />
-                    </div>
-                    <div class="div-2">€
-                      <lightning:formattedNumber value="{!Sales.Sales_to_date_this_quarter__c}" />
-                    </div>
+                  <div>
+                    <img src="/resource/1586526789000/numbr2" class="medal" />
+                    {! stats.medals.silverMedal }x
                   </div>
-                  <div class="slds-show_inline-block">
-                    <div class="div-1">Team:</div>
-                    <div class="div-1">Progress:</div>
+                  <div>
+                    <img src="/resource/1586526789000/nmbr3" class="medal" />
+                    {! stats.medals.bronzeMedal }x
                   </div>
-                  <div class="slds-show_inline-block">
-                    <div class="div-2">{!Sales.Sales_Team__r.Name}</div>
-                    <div class="div-2">{!Sales.Target_percentage__c}%</div>
+                  <div>
+                    <img src="/resource/1586526789000/completion_medal" class="medal" />
+                    {! stats.medals.hundredMedal }x
                   </div>
                 </div>
-              </article>
-              <lightning:progressBar class="progress" value="{!Sales.Target_percentage__c}" />
-              <br />
+              </aura:if>
+              <!-- /Awards row -->
+
             </div>
+            <div class="progress-bar">
+              <lightning:progressBar value="{! stats.targetPercentage }" />
+            </div>
+          </div>
+
+          <br />
+        </div>
       </aura:iteration>
     </div>
-  </article>
+
+
+  </lightning:card>
 
 
 </aura:component>

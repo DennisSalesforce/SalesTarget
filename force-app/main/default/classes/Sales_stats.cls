@@ -1,18 +1,38 @@
 public class Sales_stats {
 
-    public class Profile{
+    public class LeaderboardStats {
+        @AuraEnabled public Boolean showAwards;
+        @AuraEnabled public Medals medals;
+
+        @AuraEnabled public String imageUrl;
+        @AuraEnabled public String name;
+        @AuraEnabled public String teamName;
+        @AuraEnabled public String repId;
+        @AuraEnabled public Decimal target;
+        @AuraEnabled public Decimal targetPercentage;
+        @AuraEnabled public Decimal salesToDate;
+    }
+
+    public class Profile {
         @AuraEnabled public Medals medals;
         @AuraEnabled public WonAwards wonAwards;
     }
 
-    public class medals {
+    public class hotOpportunity {
+        @AuraEnabled public decimal currentScore;
+        @AuraEnabled public string opportunityName;
+        @AuraEnabled public string id;
+        @AuraEnabled public decimal amount;
+    }
+
+    public class Medals {
         @AuraEnabled public Decimal goldMedal = 0;
         @AuraEnabled public Decimal silverMedal = 0;
         @AuraEnabled public Decimal bronzeMedal = 0;
         @AuraEnabled public Decimal hundredMedal = 0;
     }
 
-    public class wonAwards {
+    public class WonAwards {
         @AuraEnabled public string icon;
         @AuraEnabled public string nameAward;
         @AuraEnabled public string nameAwardHistory;
@@ -20,25 +40,55 @@ public class Sales_stats {
 
     @AuraEnabled
     public static Sales_target__c getSalesTarget(id userid) {
-        List<Sales_target__c> ST = [SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c WHERE Sales_rep__c =: userid LIMIT 1];
+        List < Sales_target__c > ST = [SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__r.Name, Name, Q1__c, Q2__c, Q3__c, Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c WHERE Sales_rep__c =: userid LIMIT 1];
 
         System.debug('list ' + ST);
         return ST.get(0);
     }
 
     @auraenabled
-    public static list < sales_target__c > getAllSalesTargets(string sortBy, string filterByTeam) {
+    public static list < LeaderboardStats > getLeaderboardStats(string sortBy, string filterByTeam) {
         String querystr = '';
-        querystr += 'SELECT Id, Sales_Team__c, Sales_Team__r.Name, icon__c,of_sales_targets__c,Position__c, Target_this_quarter__c, Target_percentage__c,Sales_rep__r.Name,Sales_rep__r.Id, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c';
+        querystr += 'SELECT Id, Sales_Team__c, Sales_Team__r.Name, icon__c,of_sales_targets__c,Position__c, Target_this_quarter__c, Target_percentage__c,Sales_rep__r.Name,Sales_rep__r.Id, Name, Q1__c, Q2__c, Q3__c, Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c';
         if (filterByTeam != 'All') {
             querystr += ' WHERE Sales_team__r.name = \'' + filterByTeam + '\'';
         }
         querystr += ' order by ' + sortBy + ' DESC';
-        system.debug('string  --->> ' + querystr);
         list < sales_target__c > filterST = database.query(querystr);
-        return filterST;
 
+        List < LeaderboardStats > result = new List < LeaderboardStats > ();
+        for (sales_target__c st: filterST) {
+            LeaderboardStats stats = new LeaderboardStats();
+            stats.imageUrl = st.icon__c;
+            stats.name = st.Sales_rep__r.Name;
+            stats.teamName = st.Sales_Team__r.Name;
+            stats.repId = st.Sales_rep__r.Id;
+            stats.salesToDate = st.Sales_to_date_this_quarter__c;
+            stats.target = st.Target_this_quarter__c;
+            stats.targetPercentage = st.Target_percentage__c;
+
+            stats.showAwards = currentAwardShowSetting();
+            stats.medals = medalAwards(stats.repId);
+
+            result.add(stats);
+        }
+
+        return result;
     }
+
+    // @auraenabled
+    // public static list < sales_target__c > getAllSalesTargets(string sortBy, string filterByTeam) {
+    //     String querystr = '';
+    //     querystr += 'SELECT Id, Sales_Team__c, Sales_Team__r.Name, icon__c,of_sales_targets__c,Position__c, Target_this_quarter__c, Target_percentage__c,Sales_rep__r.Name,Sales_rep__r.Id, Name, Q1__c, Q2__c, Q3__c, Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c';
+    //     if (filterByTeam != 'All') {
+    //         querystr += ' WHERE Sales_team__r.name = \'' + filterByTeam + '\'';
+    //     }
+    //     querystr += ' order by ' + sortBy + ' DESC';
+    //     system.debug('string  --->> ' + querystr);
+    //     list < sales_target__c > filterST = database.query(querystr);
+    //     return filterST;
+
+    // }
 
 
     @auraenabled
@@ -69,12 +119,11 @@ public class Sales_stats {
 
     }
 
-    @auraenabled
-    public static list < sales_target__c > getTop() {
-        list < sales_target__c > top3Sales = [SELECT Id, Sales_team__c, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c order by Sales_to_date_this_quarter__c DESC limit 3];
-        system.debug('top 3 list' + top3Sales);
-        return top3Sales;
+    @AuraEnabled
+    public static list < Sales_Target__c > getTop() {
+        List < Sales_Target__c > top3Sales = [SELECT Id, Sales_team__c, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__r.Name, Name, Q1__c, Q2__c, Q3__c, Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c ORDER BY Sales_to_date_this_quarter__c DESC LIMIT 10];
 
+        return top3Sales;
     }
 
     @auraenabled
@@ -118,33 +167,37 @@ public class Sales_stats {
 
     @AuraEnabled
     public static boolean currentAwardShowSetting() {
-        boolean setting;
-        Sales_Target_Settings__c STS = [select Show_awards__c from Sales_Target_Settings__c where name = 'Default setting'
+        Sales_Target_Settings__c STS = [
+            SELECT Show_awards__c from Sales_Target_Settings__c where name = 'Default setting'
             limit 1
         ];
-
-        setting = STS.Show_awards__c;
-
-        return setting;
-
+        return STS.Show_awards__c;
     }
 
     @AuraEnabled
     public static list < object > getWonAwards(id userid, string medal) {
         list < object > awardList = new list < object > ();
         system.debug(medal);
-        list < Sales_Award_History__c > wonAward = new list<Sales_award_history__c>();
-        if(medal == 'Gold'){
-        wonAward = [select Sales_award__r.Name, Sales_award__r.icon__c, name, user__r.name from Sales_Award_History__c where user__c =: userid and Sales_award__r.Name = '1st Prize Sales' limit 5];
-        }   
-        if(medal == 'Silver'){
-        wonAward = [select Sales_award__r.Name, Sales_award__r.icon__c, name, user__r.name from Sales_Award_History__c where user__c =: userid and Sales_award__r.Name = '2nd Prize Sales' limit 5];
-        }   
-        if(medal == 'Bronze'){
-        wonAward = [select Sales_award__r.Name, Sales_award__r.icon__c, name, user__r.name from Sales_Award_History__c where user__c =: userid and Sales_award__r.Name = '3th Prize Sales' limit 5];
-        }   
-        if(medal == 'Hundred'){
-        wonAward = [select Sales_award__r.Name, Sales_award__r.icon__c, name, user__r.name from Sales_Award_History__c where user__c =: userid and Sales_award__r.Name = '100% Target Achievement' limit 5];
+        list < Sales_Award_History__c > wonAward = new list < Sales_award_history__c > ();
+        if (medal == 'Gold') {
+            wonAward = [select Sales_award__r.Name, Sales_award__r.icon__c, name, user__r.name from Sales_Award_History__c where user__c =: userid and Sales_award__r.Name = '1st Prize Sales'
+                limit 5
+            ];
+        }
+        if (medal == 'Silver') {
+            wonAward = [select Sales_award__r.Name, Sales_award__r.icon__c, name, user__r.name from Sales_Award_History__c where user__c =: userid and Sales_award__r.Name = '2nd Prize Sales'
+                limit 5
+            ];
+        }
+        if (medal == 'Bronze') {
+            wonAward = [select Sales_award__r.Name, Sales_award__r.icon__c, name, user__r.name from Sales_Award_History__c where user__c =: userid and Sales_award__r.Name = '3th Prize Sales'
+                limit 5
+            ];
+        }
+        if (medal == 'Hundred') {
+            wonAward = [select Sales_award__r.Name, Sales_award__r.icon__c, name, user__r.name from Sales_Award_History__c where user__c =: userid and Sales_award__r.Name = '100% Target Achievement'
+                limit 5
+            ];
         }
 
         for (Sales_Award_History__c SaAwHi: wonAward) {
@@ -181,6 +234,50 @@ public class Sales_stats {
 
         System.debug('WON OPPS' + wonOpps);
         return wonOpps;
+
+    }
+
+    Public static void SalesHistorySnapshot() {
+        list < sales_target__c > SalesTargets = new list < sales_target__c > ();
+        SalesTargets = [SELECT sales_rep__c, Id, Sales_team__c, Position__c, Target_this_quarter__c, Sales_rep__r.Name, Target_percentage__c, Sales_to_date_this_quarter__c FROM Sales_target__c];
+        list < Sales_History__c > SalesHistory = new list < Sales_History__c > ();
+        for (sales_target__c SThistory: SalesTargets) {
+            Sales_History__c SalesHistoryIndividual = new Sales_History__c(
+                name = date.today().Month() + ' ' + date.today().Year() + ' ' + SThistory.Sales_rep__r.Name,
+                Percentage_of_Target__c = SThistory.Target_percentage__c,
+                Position__c = SThistory.Position__c,
+                Sales_target__c = SThistory.Target_this_quarter__c,
+                Total_Sales__c = SThistory.Sales_to_date_this_quarter__c,
+                User__c = SThistory.sales_rep__c
+            );
+            SalesHistory.add(SalesHistoryIndividual);
+        }
+        insert SalesHistory;
+    }
+
+    @auraenabled
+    public static list<hotOpportunity> HotOpportunities(id userid) {
+        datetime todayMinus90 = System.now().addDays(-90);
+        list < opportunity > userOpportunities = new list < opportunity > ();
+        userOpportunities = [SELECT name, id, ExpectedRevenue, LastModifiedDate, amount FROM opportunity
+            WHERE LastModifiedDate >=: todayMinus90
+            AND ownerId =: userid
+        ];
+
+        list < hotOpportunity > showHotOpportunities = new list < hotOpportunity > ();
+
+        double currentScore;
+        for (opportunity o: userOpportunities) {
+            hotOpportunity hotOpp = new hotOpportunity();
+            hotOpp.currentScore = o.ExpectedRevenue * (0.5 + ((90 - (System.today().daysBetween(o.LastModifiedDate.date()))) / 90));
+            hotOpp.opportunityName = o.name;
+            hotOpp.id = o.id;
+            hotOpp.amount = o.amount;
+            showHotOpportunities.add(hotOpp);
+        }
+
+        system.debug('hotopp ' + showHotOpportunities);
+        return showHotOpportunities;
 
     }
 

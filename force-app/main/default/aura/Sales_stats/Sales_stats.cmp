@@ -5,6 +5,7 @@
   <aura:attribute name="showAwards" type="Boolean" />
   <aura:attribute name="showWonAwards" type="Boolean" default="FALSE" />
   <aura:attribute name="showWonOpps" type="Boolean" default="FALSE" />
+  <aura:attribute name="showHotOpportunties" type="Boolean" default="TRUE" />
   <aura:attribute name="Sales" type="Sales_target__c" />
   <aura:attribute name="wonOpps" type="Opportunity[]" />
   <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
@@ -13,6 +14,7 @@
   <aura:attribute name="activeSections" type="List" default="[]" />
   <aura:attribute name="awards" type="Object" />
   <aura:attribute name="wonAwards" type="Object[]" />
+  <aura:attribute name="hotOpportunities" type="Object[]" />
 
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
 
@@ -96,7 +98,7 @@
               {! v.awards.silverMedal }x
             </div>
             <div>
-              <a onclick="{! c.onClickBronze }"><img src="/resource/1586526789000/nmbr3" class="medal" /></a>
+              <a onclick="{! c.onClickBronze }"><img src="/resource/1586526789000/numbr3" class="medal" /></a>
               {! v.awards.bronzeMedal }x
             </div>
             <div>
@@ -133,21 +135,24 @@
         </aura:if>
 
         <!-- List of Won Opportunites -->
-        <aura:if isTrue="{!v.showWonOpps}">
+        <aura:if isTrue="{!v.showHotOpportunties}">
           <div class="oppsWon">
             <div class="oppsWon1">
-              <div class="slds-show_inline-block"><b>These are your last closed won Opportunities</b></div>
+              <div class="slds-show_inline-block"><b>These are your Hot Opportunities</b></div>
               <div class="slds-show_inline-block">
                 <div class="close"><a onclick="{!c.closeShowOpps}"><b>close</b></a></div>
               </div>
               <div class="oppsWon2">
-                <aura:iteration items="{!v.wonOpps}" var="opp">
+                <aura:iteration items="{!v.hotOpportunities}" var="opp">
                   <div class="slds-show_inline-block">
-                    <div class="OppName"><a href="{!'/lightning/r/Opportunity/'+ opp.Id +'/view'}">{!opp.Name}</a>
+                    <div class="OppName"><a href="{!'/lightning/r/Opportunity/'+ opp.id +'/view'}">{!opp.opportunityName}</a>
                     </div>
                   </div>
                   <div class="slds-show_inline-block">
-                    <div class="OppAmount">€ {!opp.Amount}</div>
+                    <div class="OppAmount">€ {!opp.amount} </div>
+                  </div>
+                  <div class="slds-show_inline-block">
+                    <div class="OppAmount">&nbsp;&nbsp; Current score: {!opp.currentScore}</div>
                   </div><br />
                 </aura:iteration>
               </div>

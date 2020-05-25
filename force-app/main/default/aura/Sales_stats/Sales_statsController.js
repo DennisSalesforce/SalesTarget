@@ -4,6 +4,7 @@
 		helper.doInitDaysLeft(component, event);
 		helper.showAwards(component, event);
 		helper.getAwards(component, event);
+		helper.showHotOpportunityHelper(component, event);
 	},
 
     loadProgress : function(component,event,helper){
