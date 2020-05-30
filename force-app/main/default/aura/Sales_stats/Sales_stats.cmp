@@ -5,10 +5,9 @@
   <aura:attribute name="showAwards" type="Boolean" />
   <aura:attribute name="showWonAwards" type="Boolean" default="FALSE" />
   <aura:attribute name="showWonOpps" type="Boolean" default="FALSE" />
-  <aura:attribute name="showHotOpportunties" type="Boolean" default="TRUE" />
+  <aura:attribute name="showHotOpportunties" type="Boolean" default="FALSE" />
   <aura:attribute name="Sales" type="Sales_target__c" />
   <aura:attribute name="wonOpps" type="Opportunity[]" />
-  <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:attribute name="progress" type="Integer" default="0" />
   <aura:attribute name="daysLeftInQuarter" type="Integer" default="0" />
   <aura:attribute name="activeSections" type="List" default="[]" />
@@ -16,6 +15,7 @@
   <aura:attribute name="wonAwards" type="Object[]" />
   <aura:attribute name="hotOpportunities" type="Object[]" />
 
+  <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
 
   <lightning:card>
@@ -60,7 +60,8 @@
           <tr>
             <td>Target:</td>
             <th>
-              €<lightning:formattedNumber value="{!v.Sales.Target_this_quarter__c}" />
+              €
+              <lightning:formattedNumber value="{!v.Sales.Target_this_quarter__c}" />
             </th>
             <td>&nbsp;&nbsp;</td>
             <td>Remaning Days:</td>
@@ -72,7 +73,8 @@
           <tr>
             <td>Sales:</td>
             <th>
-              €<lightning:formattedNumber value="{!v.Sales.Sales_to_date_this_quarter__c}" />
+              €
+              <lightning:formattedNumber value="{!v.Sales.Sales_to_date_this_quarter__c}" />
             </th>
             <td>&nbsp;&nbsp;</td>
             <td>Progress:</td>
@@ -102,63 +104,89 @@
               {! v.awards.bronzeMedal }x
             </div>
             <div>
-              <a onclick="{! c.onClickHundred }"><img src="/resource/1586526789000/completion_medal" class="medal" /></a>
+              <a onclick="{! c.onClickHundred }"><img src="/resource/1586526789000/completion_medal"
+                  class="medal" /></a>
               {! v.awards.hundredMedal }x
             </div>
           </div>
         </aura:if>
 
         <!-- List of Won Awards -->
-        <aura:if isTrue="{!v.showWonAwards}">
-          <div class="awardsWon">
-            <div class="awardsWon1">
-              <div class="slds-show_inline-block"><b>These are all the won awards</b></div>
-              <div class="slds-show_inline-block">
-                <div class="close"><a onclick="{!c.onClickClose}"><b>close</b></a></div>
-              </div>
-              <div class="awardsWon2">
-                <aura:iteration items="{!v.wonAwards}" var="awards">
-                  <div class="slds-show_inline-block">
-                    <div class="awardIcon"><img src="{!awards.icon}" class="medal" /></div>
-                  </div>
-                  <div class="slds-show_inline-block">
-                    <div class="awardName">{!awards.nameAward}</div>
-                  </div>
-                  <div class="slds-show_inline-block">
-                    <div class="awardNameHistory">{!awards.nameAwardHistory}</div>
-                  </div><br />
-                </aura:iteration>
-              </div>
+        <aura:if isTrue="{! v.showWonAwards }">
+          <hr style="margin: 16px -16px 8px -16px" />
+          <div class="awards--container">
+            <table cellpadding="4" cellspacing="0" border="0">
+              <aura:iteration items="{!v.wonAwards}" var="awards">
+                <tr>
+                  <td><img src="{!awards.icon}" class="medal" /></td>
+                  <td><b>{! awards.nameAward }</b></td>
+                  <td>{! awards.nameAwardHistory }</td>
+                </tr>
 
-            </div>
+                <!--
+                <div class="slds-show_inline-block">
+                  <div class="awardIcon"><img src="{!awards.icon}" class="medal" /></div>
+                </div>
+                <div class="slds-show_inline-block">
+                  <div class="awardName">{!awards.nameAward}</div>
+                </div>
+                <div class="slds-show_inline-block">
+                  <div class="awardNameHistory">{!awards.nameAwardHistory}</div>
+                </div>
+                -->
+
+              </aura:iteration>
+            </table>
+          </div>
+
+          <!-- Collapse footer -->
+          <div class="expandDetails">
+            <a onclick="{! c.onClickClose }">
+              <b>hide medals list</b>
+            </a>
+          </div>
+        </aura:if>
+
+        <!-- Top opportunities footer -->
+
+        <aura:if isTrue="{! and(v.showHotOpportunties == false, v.showWonAwards == false) }">
+          <div class="expandDetails">
+            <a onclick="{! c.toggleHotOpportunities }">
+              <b>show your top opportunities</b>
+            </a>
           </div>
         </aura:if>
 
         <!-- List of Won Opportunites -->
-        <aura:if isTrue="{!v.showHotOpportunties}">
-          <div class="oppsWon">
-            <div class="oppsWon1">
-              <div class="slds-show_inline-block"><b>These are your Hot Opportunities</b></div>
-              <div class="slds-show_inline-block">
-                <div class="close"><a onclick="{!c.closeShowOpps}"><b>close</b></a></div>
-              </div>
-              <div class="oppsWon2">
-                <aura:iteration items="{!v.hotOpportunities}" var="opp">
-                  <div class="slds-show_inline-block">
-                    <div class="OppName"><a href="{!'/lightning/r/Opportunity/'+ opp.id +'/view'}">{!opp.opportunityName}</a>
-                    </div>
-                  </div>
-                  <div class="slds-show_inline-block">
-                    <div class="OppAmount">€ {!opp.amount} </div>
-                  </div>
-                  <div class="slds-show_inline-block">
-                    <div class="OppAmount">&nbsp;&nbsp; Current score: {!opp.currentScore}</div>
-                  </div><br />
-                </aura:iteration>
-              </div>
-
-            </div>
+        <aura:if isTrue="{! v.showHotOpportunties }">
+          <hr style="margin: 16px -16px 8px -16px" />
+          <div class="opportunities--container">
+            <table cellpadding="4" cellspacing="0" border="0">
+              <aura:iteration items="{!v.hotOpportunities}" indexVar="idx" start="1" var="opp">
+                <tr>
+                  <td rowspan="2" style="font-size:120%"><b>#{! idx }</b>&nbsp;</td>
+                  <td><a href="{!'/lightning/r/Opportunity/'+ opp.id +'/view'}">{! opp.opportunityName }</a></td>
+                  <td
+                    title="The opportunity score is based on how fresh the opportunity is in days and the probability of closing it.">
+                    Score: <b class="score">{! opp.currentScore } points</b>
+                  </td>
+                </tr>
+                <tr>
+                  <td><b>€
+                      <lightning:formattedNumber value="{! opp.amount }" /></b></td>
+                  <td>Probability: <b>{! opp.probability }%</b></td>
+                </tr>
+              </aura:iteration>
+            </table>
           </div>
+
+          <!-- Collapse footer -->
+          <div class="expandDetails">
+            <a onclick="{! c.toggleHotOpportunities }">
+              <b>hide your top opportunities</b>
+            </a>
+          </div>
+
         </aura:if>
       </div>
 

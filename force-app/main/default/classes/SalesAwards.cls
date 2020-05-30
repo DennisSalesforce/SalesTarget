@@ -2,8 +2,8 @@ global class SalesAwards implements Schedulable{
     public void execute(SchedulableContext sc) {
         list < sales_target__c > SalesTargetsTarget = new list < sales_target__c > ();
         list < sales_target__c > SalesTargetsTop3 = new list < sales_target__c > ();
-        SalesTargetsTarget = [SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__c, Sales_rep__r.Name, Name, Q1__c, Q2__c, Q3__c, Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c order where Target_percentage__c > 100];
-        SalesTargetsTop3 = [SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__c, Sales_rep__r.Name, Name, Q1__c, Q2__c, Q3__c, Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c order by Sales_to_date_this_quarter__c DESC limit 3];
+        SalesTargetsTarget = [SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__c, Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c order where Target_percentage__c > 100];
+        SalesTargetsTop3 = [SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__c, Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c order by Sales_to_date_this_quarter__c DESC limit 3];
 
         sales_award__c SalesAward = [select id from sales_award__c where name = '100% Target Achievement'
             limit 1

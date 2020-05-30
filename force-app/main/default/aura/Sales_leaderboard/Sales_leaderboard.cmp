@@ -9,6 +9,7 @@
   <aura:attribute name="sortBy" type="string" default="Target_percentage__c" />
   <aura:attribute name="filterByTeam" type="string" default="All" />
   <aura:attribute name="loading" type="boolean" default="TRUE" />
+  <aura:attribute name="periodName" type="String" default="Month" />
 
   <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
@@ -33,9 +34,13 @@
             <option value="{!Team.Name}">{!Team.Name}</option>
           </aura:iteration>
         </lightning:select>
-        Days Remaining:<br/>{!v.daysLeftInQuarter}
-      </div>
 
+        <div style="flex-grow: 1"></div>
+        <div class="daysLeft">
+          <span style="font-size: 180%;">{!v.daysLeftInQuarter}</span> days<br/>
+          <span style="color: darkslategray;">to close {! v.periodName }</span>
+        </div>
+      </div>
 
       <hr />
 
@@ -89,7 +94,7 @@
                     {! stats.medals.silverMedal }x
                   </div>
                   <div>
-                    <img src="/resource/1586526789000/nmbr3" class="medal" />
+                    <img src="/resource/1586526789000/numbr3" class="medal" />
                     {! stats.medals.bronzeMedal }x
                   </div>
                   <div>

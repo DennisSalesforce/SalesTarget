@@ -20,6 +20,7 @@ public class Sales_stats {
 
     public class hotOpportunity {
         @AuraEnabled public decimal currentScore;
+        @AuraEnabled public decimal probability;
         @AuraEnabled public string opportunityName;
         @AuraEnabled public string id;
         @AuraEnabled public decimal amount;
@@ -259,20 +260,24 @@ public class Sales_stats {
     public static list<hotOpportunity> HotOpportunities(id userid) {
         datetime todayMinus90 = System.now().addDays(-90);
         list < opportunity > userOpportunities = new list < opportunity > ();
-        userOpportunities = [SELECT name, id, ExpectedRevenue, LastModifiedDate, amount FROM opportunity
+        //all opportunities modified in the last 90 days
+        userOpportunities = [SELECT name, id, ExpectedRevenue, LastModifiedDate, Amount, Probability FROM opportunity
             WHERE LastModifiedDate >=: todayMinus90
             AND ownerId =: userid
+            AND StageName NOT IN ('Closed Won','Closed Lost')
         ];
 
         list < hotOpportunity > showHotOpportunities = new list < hotOpportunity > ();
 
         double currentScore;
+
         for (opportunity o: userOpportunities) {
             hotOpportunity hotOpp = new hotOpportunity();
             hotOpp.currentScore = o.ExpectedRevenue * (0.5 + ((90 - (System.today().daysBetween(o.LastModifiedDate.date()))) / 90));
             hotOpp.opportunityName = o.name;
             hotOpp.id = o.id;
             hotOpp.amount = o.amount;
+            hotOpp.probability = o.Probability;
             showHotOpportunities.add(hotOpp);
         }
 
