@@ -1,3 +1,10 @@
+.THIS .slds-card__header {
+    padding-bottom: 12px;
+    margin: 0;
+    background-color: rgb(243, 243, 243);
+    border-bottom: 1px solid rgb(221, 219, 218);
+}
+
 .THIS .slds-progress-bar_medium {
     height: 14px !important;
     margin: 6px 0 !important;
@@ -12,48 +19,48 @@
 }
 
 .THIS hr {
-    margin: 16px 0;
+    margin: 22px 0;
 }
 
-.THIS .leaderboard-container{
+.THIS .leaderboard-container {
     display: flex;
     margin-bottom: 24px;
     margin-left: -8px;
     margin-right: -8px;
 }
 
-.THIS .leaderboard-container > *{
+.THIS .leaderboard-container>* {
     flex: auto 0 0;
     margin: 0 8px;
 }
 
-.THIS .leaderboard-container .profile-container{
+.THIS .leaderboard-container .profile-container {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
 
-.THIS .leaderboard-container .profile-container > div{
+.THIS .leaderboard-container .profile-container>div {
     flex: auto 0 0;
 }
 
-.THIS .leaderboard-container .profile-container .user-stats{
+.THIS .leaderboard-container .profile-container .user-stats {
     flex-grow: 1;
     display: flex;
     justify-content: space-between;
 }
 
-.THIS .leaderboard-container .profile-container .user-stats > div{
+.THIS .leaderboard-container .profile-container .user-stats>div {
     flex: auto 0 0;
 }
 
-.THIS .leaderboard-container .profile-container .user-stats .user-name{
+.THIS .leaderboard-container .profile-container .user-stats .user-name {
     flex-basis: 180px !important;
     overflow: hidden;
     white-space: nowrap;
 }
 
-.THIS .profile-image > img{
+.THIS .profile-image>img {
     border-radius: 100%;
     width: 54px;
     height: 54px;
@@ -79,7 +86,7 @@
     align-items: center;
 }
 
-.THIS .filters > * {
+.THIS .filters>* {
     flex: auto 0 0;
     margin: 0 6px;
 }
@@ -89,7 +96,7 @@
     border: 1px solid lightgray;
     border-radius: 4px;
     padding: 4px 8px;
-    transform: translateY(-32px);
+    /* transform: translateY(-32px); */
 }
 
 
@@ -100,9 +107,10 @@
     margin: 0 -6px;
 }
 
-.THIS .awards > div {
+.THIS .awards>div {
     flex: auto 0 0;
-    margin: 0 6px;;
+    margin: 0 6px;
+    ;
 }
 
 .THIS .medal {
