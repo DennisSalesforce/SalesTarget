@@ -37,7 +37,7 @@
 
         <div style="flex-grow: 1"></div>
         <div class="daysLeft">
-          <span style="font-size: 180%;">{!v.daysLeftInQuarter}</span> day <aura:if isTrue="{ v.daysLeftInQuarter != 1}">s</aura:if><br/>
+          <span style="font-size: 180%;">{!v.daysLeftInQuarter}</span> day<aura:if isTrue="{! v.daysLeftInQuarter != 1}">s</aura:if><br/>
           <span style="color: darkslategray;">to close {! v.periodName }</span>
         </div>
       </div>
@@ -108,6 +108,7 @@
             </div>
             <div class="progress-bar">
               <lightning:progressBar value="{! stats.targetPercentage }" />
+              <div class="progress-bar__percentage">{! stats.targetPercentage }%</div>
             </div>
           </div>
 

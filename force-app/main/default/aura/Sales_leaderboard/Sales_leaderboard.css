@@ -8,6 +8,8 @@
 .THIS .slds-progress-bar_medium {
     height: 14px !important;
     margin: 6px 0 !important;
+    border-radius: 14px;
+    overflow: hidden;
 }
 
 .THIS .slds-progress-bar__value {
@@ -16,6 +18,22 @@
             rgb(0, 161, 224) 10px,
             #465298 10px,
             #465298 20px) !important;
+    border-radius: 14px;
+}
+
+.THIS .progress-bar__percentage {
+    height: 14px;
+    width: 48px;
+    position: relative;
+    top: -20px;
+    left: 50%;
+    margin-left: -24px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border-radius: 14px;
 }
 
 .THIS hr {
