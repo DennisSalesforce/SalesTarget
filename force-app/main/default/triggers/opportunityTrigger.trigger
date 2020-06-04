@@ -1,17 +1,16 @@
-trigger opportunityTrigger on Opportunity (before insert, before update) {
+trigger opportunityTrigger on Opportunity (after insert, after update) {
 
-    for(Opportunity opp : trigger.new){
-        
-        id oppID = opp.Id;
-        id userID = opp.OwnerId;
-        decimal amount = opp.Amount;
+    Set<Id> usersToUpdate = new Set<Id>();
+
+    for(Opportunity opp : Trigger.new){
         if(opp.StageName == 'Closed Won'){
-            
-            opportunityHandler.updateSalesTarget(userID, amount, oppID);
-            opportunityHandler.updatePosition(userID, amount, oppID);
+            usersToUpdate.add(opp.OwnerId);
         }
-      
-
     }
-    
+
+    for(Id userId : usersToUpdate){
+        opportunityHandler.updateSalesTarget(userID);
+        // opportunityHandler.updatePosition(userID, amount, oppID);
+    }
+
 }
