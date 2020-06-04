@@ -86,7 +86,10 @@
         </table>
 
         <!-- Progress Bar -->
-        <lightning:progressBar class="progress" value="{!v.Sales.Target_percentage__c}" />
+        <div>
+          <lightning:progressBar class="progress" value="{!v.Sales.Target_percentage__c}" />
+          <!-- <div class="progress-bar__percentage">{! v.Sales.Target_percentage__c }%</div> -->
+        </div>
 
         <!-- Award medals -->
         <aura:if isTrue="{!v.showAwards}">

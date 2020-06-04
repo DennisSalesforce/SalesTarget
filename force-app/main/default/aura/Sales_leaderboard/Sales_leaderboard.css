@@ -14,10 +14,10 @@
 
 .THIS .slds-progress-bar__value {
     background: repeating-linear-gradient(225deg,
-            rgb(0, 161, 224),
-            rgb(0, 161, 224) 10px,
-            #465298 10px,
-            #465298 20px) !important;
+            rgb(0, 156, 219),
+            rgb(0, 156, 219) 10px,
+            rgb(0, 95, 178) 10px,
+            rgb(0, 95, 178) 20px) !important;
     border-radius: 14px;
 }
 
