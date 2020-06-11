@@ -10,7 +10,6 @@ trigger opportunityTrigger on Opportunity (after insert, after update) {
 
     for(Id userId : usersToUpdate){
         opportunityHandler.updateSalesTarget(userID);
-        // opportunityHandler.updatePosition(userID, amount, oppID);
     }
 
 }
