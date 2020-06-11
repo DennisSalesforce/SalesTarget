@@ -6,11 +6,10 @@
   <aura:attribute name="SalesTeam" type="Sales_Team__c[]" />
   <aura:attribute name="progress" type="Integer" default="0" />
   <aura:attribute name="daysLeftInQuarter" type="Integer" default="0" />
-  <aura:attribute name="sortBy" type="string" default="Target_percentage__c" />
+  <aura:attribute name="periodName" type="String" default="" />
+  <aura:attribute name="sortBy" type="string" default="" />
   <aura:attribute name="filterByTeam" type="string" default="All" />
   <aura:attribute name="loading" type="boolean" default="TRUE" />
-  <aura:attribute name="periodName" type="String" default="Month" />
-
   <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
 
@@ -24,8 +23,14 @@
 
       <div class="filters">
         <lightning:select name="0Family" label="Sort by:" onchange="{! c.updateSort }" disabled="{! v.loading }">
+        <aura:if isTrue="{!v.periodName == 'Month'}">
+          <option value="Target_percentage_this_month__c">Target percentage</option>
+          <option value="Sales_to_date_this_month__c">Sales amount</option>
+        </aura:if>
+        <aura:if isTrue="{!v.periodName != 'Month'}">
           <option value="Target_percentage__c">Target percentage</option>
           <option value="Sales_to_date_this_quarter__c">Sales amount</option>
+        </aura:if>
         </lightning:select>
 
         <lightning:select name="1Family" label="Team:" onchange="{! c.updateFilter }" disabled="{! v.loading }">
@@ -77,7 +82,12 @@
                   Sales:
                 </div>
                 <div>
+                <aura:if isTrue="{!v.periodName == 'Month'}">
+                  <b>€ <lightning:formattedNumber value="{! stats.targetThisMonth }" /></b><br />
+                </aura:if>
+                <aura:if isTrue="{!v.periodName != 'Month'}">
                   <b>€ <lightning:formattedNumber value="{! stats.target }" /></b><br />
+                </aura:if>
                   <b>€ <lightning:formattedNumber value="{! stats.salesToDate }" /></b>
                 </div>
               </div>
