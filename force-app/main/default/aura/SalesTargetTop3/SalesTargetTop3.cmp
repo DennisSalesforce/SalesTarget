@@ -29,7 +29,12 @@
                   <a href="{! '/lightning/r/User/' + person.Sales_rep__r.Id + '/view' }">
                     {! person.Sales_rep__r.Name }
                   </a><br/>
-                  &nbsp;&nbsp;€ <lightning:formattedNumber value="{!person.Sales_to_date_this_quarter__c}" />
+                  <aura:if isTrue="{!v.periodName == 'Month'}">
+                    &nbsp;&nbsp;€ <lightning:formattedNumber value="{!person.Sales_to_date_this_month__c}" />
+                  </aura:if>
+                  <aura:if isTrue="{!v.periodName != 'Month'}">
+                    &nbsp;&nbsp;€ <lightning:formattedNumber value="{!person.Sales_to_date_this_quarter__c}" />
+                  </aura:if>
                 </b>
               </div>
             </div>
@@ -54,7 +59,12 @@
                 </b>
               </div>
               <div style="flex: 1 0 auto;">
-                € <lightning:formattedNumber value="{!person.Sales_to_date_this_quarter__c}" />
+                <aura:if isTrue="{!v.periodName == 'Month'}">
+                    &nbsp;&nbsp;€ <lightning:formattedNumber value="{!person.Sales_to_date_this_month__c}" />
+                  </aura:if>
+                  <aura:if isTrue="{!v.periodName != 'Month'}">
+                    &nbsp;&nbsp;€ <lightning:formattedNumber value="{!person.Sales_to_date_this_quarter__c}" />
+                  </aura:if>
               </div>
             </div>
           </aura:if>

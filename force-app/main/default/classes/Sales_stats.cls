@@ -9,6 +9,7 @@ public class Sales_stats {
         @AuraEnabled public String teamName;
         @AuraEnabled public String repId;
         @AuraEnabled public Decimal target;
+        @AuraEnabled public Decimal targetThisMonth;
         @AuraEnabled public Decimal targetPercentage;
         @AuraEnabled public Decimal salesToDate;
     }
@@ -43,14 +44,19 @@ public class Sales_stats {
     public static Sales_target__c getSalesTarget(id userid) {
         return SalesTargetUtils.getUserSTForThisYear(userId);
     }
+    @AuraEnabled
+    public static string getPeriod() {
+        return SalesTargetSettings.currentSettingName();
+    }
 
     @auraenabled
     public static list < LeaderboardStats > getLeaderboardStats(string sortBy, string filterByTeam) {
+        Boolean isMonthlyLeaderBoard = SalesTargetSettings.currentSetting();
         String querystr = '';
-        querystr += 'SELECT Id, Sales_Team__c, Sales_Team__r.Name, icon__c,of_sales_targets__c,Position__c, Target_this_quarter__c, Target_percentage__c,Sales_rep__r.Name,Sales_rep__r.Id, Name, Q1__c, Q2__c, Q3__c, Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c';
-        if (filterByTeam != 'All') {
-            querystr += ' WHERE Sales_team__r.name = \'' + filterByTeam + '\'';
-        }
+            querystr += 'SELECT Id, Target_percentage_this_month__c, Sales_Team__c, Sales_Team__r.Name, icon__c,of_sales_targets__c,Position__c, Target_this_quarter__c, Target_this_month__c, Target_percentage__c,Sales_rep__r.Name,Sales_rep__r.Id, Name, Q1__c, Q2__c, Q3__c, Q4__c, Sales_to_date_this_quarter__c, Sales_to_date_this_month__c FROM Sales_target__c';
+            if (filterByTeam != 'All') {
+                querystr += ' WHERE Sales_team__r.name = \'' + filterByTeam + '\'';
+            }
         querystr += ' order by ' + sortBy + ' DESC';
         list < sales_target__c > filterST = database.query(querystr);
 
@@ -60,11 +66,22 @@ public class Sales_stats {
             stats.imageUrl = st.icon__c;
             stats.name = st.Sales_rep__r.Name;
             stats.teamName = st.Sales_Team__r.Name;
-            stats.repId = st.Sales_rep__r.Id;
-            stats.salesToDate = st.Sales_to_date_this_quarter__c;
-            stats.target = st.Target_this_quarter__c;
-            stats.targetPercentage = st.Target_percentage__c;
-
+            stats.repId = st.Sales_rep__r.Id;    
+            if(isMonthlyLeaderBoard == true){
+                stats.salesToDate = st.Sales_to_date_this_month__c;
+            } else {
+                stats.salesToDate = st.Sales_to_date_this_quarter__c;
+            } 
+            if(isMonthlyLeaderBoard == true){  
+                stats.targetThisMonth = st.Target_this_month__c;
+            } else {
+                stats.target = st.Target_this_quarter__c;
+            }
+            if(isMonthlyLeaderBoard == true){  
+                stats.targetPercentage = st.Target_percentage_this_month__c;
+            } else {
+                stats.targetPercentage = st.Target_percentage__c;
+            }
             stats.showAwards = currentAwardShowSetting();
             stats.medals = medalAwards(stats.repId);
 
@@ -91,20 +108,16 @@ public class Sales_stats {
 
     @auraenabled
     public static integer daysLeftInQuarter() {
+        string period = SalesTargetSettings.currentSettingName();
         period P = new period();
         date today = system.today();
-        //quarter__mdt Quarter = [select end_date__c from quarter__mdt where start_date__c < today and end_date__c > today];
 
-        Sales_Target_Settings__c STS = [select monthly__c from Sales_Target_Settings__c where name = 'Default setting'
-            limit 1
-        ];
-
-        if (STS.Monthly__c == TRUE) {
+        if (period == 'Month') {
             P = [select StartDate, EndDate, type from period where type = 'Month'
                 and StartDate <= today and EndDate >= today
             ];
         }
-        if (STS.Monthly__c == FALSE) {
+        if (period != 'Month') {
             P = [select StartDate, EndDate, type from period where type = 'Quarter'
                 and StartDate <= today and EndDate >= today
             ];
@@ -124,7 +137,7 @@ public class Sales_stats {
 
         if(isMonthly){
             top3Sales = [
-                SELECT Id, Sales_team__c, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__r.Name, Name, Q1__c, Q2__c, Q3__c, Q4__c, Sales_to_date_this_quarter__c
+                SELECT Id, Sales_team__c, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__r.Name, Name, Q1__c, Q2__c, Q3__c, Q4__c, Sales_to_date_this_month__c
                 FROM Sales_target__c
                 ORDER BY Sales_to_date_this_month__c
                 DESC LIMIT 10
