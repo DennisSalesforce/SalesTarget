@@ -123,7 +123,7 @@ public class salesTargetSettings {
 
         list < AggregateResult > toBeUpdateOpps = new list < AggregateResult > ();
         list < sales_target__c > toBeUpdateST = new list < sales_target__c > ();
-        toBeUpdateST = [select id, Sales_to_date_this_quarter__c, Sales_rep__c, Target_preferences__c from Sales_target__c];
+        toBeUpdateST = [select id, Sales_to_date_this_quarter__c, Sales_rep__c from Sales_target__c];
 
         for (sales_target__c S: toBeUpdateST) {
             S.Sales_to_date_this_quarter__c = 0;
@@ -160,7 +160,6 @@ public class salesTargetSettings {
                 decimal totalAmount = (Decimal) arr.get('expr0');
                 sales_target__c STfinal = (sales_target__c) STMap.get(ownerid);
                 STfinal.Sales_to_date_this_quarter__c = totalAmount;
-                STfinal.Target_preferences__c = 'Monthly';
                 System.debug('STFINAL' + STfinal);
             }
         } else {
@@ -169,7 +168,6 @@ public class salesTargetSettings {
                 decimal totalAmount = (Decimal) arr.get('expr0');
                 sales_target__c STfinal = (sales_target__c) STMap.get(ownerid);
                 STfinal.Sales_to_date_this_quarter__c = totalAmount;
-                STfinal.Target_preferences__c = 'Quarterly';
             }
         }
 
