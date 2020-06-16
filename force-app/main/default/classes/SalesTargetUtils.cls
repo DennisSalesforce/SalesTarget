@@ -29,4 +29,18 @@ public class SalesTargetUtils {
         return userSalesTarget;
     }
 
+    public static Integer getSalesTargetPosition(Sales_Target__c target, String type){
+        if(type == 'Monthly'){
+            List<Sales_target__c> stsAboveUs = [SELECT Id FROM Sales_target__c WHERE Sales_to_date_this_month__c > :target.Sales_to_date_this_month__c];
+            return stsAboveUs.size() + 1;
+        }else{
+            List<Sales_target__c> stsAboveUs = [SELECT Id FROM Sales_target__c WHERE Sales_to_date_this_quarter__c > :target.Sales_to_date_this_quarter__c];
+            return stsAboveUs.size() + 1;
+        }
+    }
+
+    public static String md5(String input){
+        return EncodingUtil.base64Encode(Crypto.generateDigest('MD5', Blob.valueOf(input)));
+    }
+
 }

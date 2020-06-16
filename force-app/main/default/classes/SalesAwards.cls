@@ -146,6 +146,5 @@ global class SalesAwards implements Schedulable{
         // Upsert all created awards
         insert awarded;
         // Database.upsert(awarded, Sales_Award_History__c.Award_Id__c);
-
     }
 }

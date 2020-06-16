@@ -1,12 +1,12 @@
-// Update opts
-
+// Update opts and histories
 update [SELECT Id FROM Opportunity WHERE Owner.IsActive = TRUE];
-
-opportunityHandler.updateSalesTarget('0053X00000BSPfgQAH');
-
+SalesHistoryJob.historySnapshot();
 
 Boolean endofQuarter = salesAwardQuarterly.isEndOfQuarter();
 System.debug(endofQuarter);
+
+// Install code
+SalesTargetInstaller.install();
 
 
 SalesAwards task = new SalesAwards();
