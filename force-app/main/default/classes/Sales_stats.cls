@@ -66,18 +66,18 @@ public class Sales_stats {
             stats.imageUrl = st.icon__c;
             stats.name = st.Sales_rep__r.Name;
             stats.teamName = st.Sales_Team__r.Name;
-            stats.repId = st.Sales_rep__r.Id;    
+            stats.repId = st.Sales_rep__r.Id;
             if(isMonthlyLeaderBoard == true){
                 stats.salesToDate = st.Sales_to_date_this_month__c;
             } else {
                 stats.salesToDate = st.Sales_to_date_this_quarter__c;
-            } 
-            if(isMonthlyLeaderBoard == true){  
+            }
+            if(isMonthlyLeaderBoard == true){
                 stats.targetThisMonth = st.Target_this_month__c;
             } else {
                 stats.target = st.Target_this_quarter__c;
             }
-            if(isMonthlyLeaderBoard == true){  
+            if(isMonthlyLeaderBoard == true){
                 stats.targetPercentage = st.Target_percentage_this_month__c;
             } else {
                 stats.targetPercentage = st.Target_percentage__c;
@@ -266,29 +266,6 @@ public class Sales_stats {
 
     }
 
-
-    public static void SalesHistorySnapshot() {
-        list < sales_target__c > SalesTargets = new list < sales_target__c > ();
-        SalesTargets = [
-            SELECT sales_rep__c, Id, Sales_team__c, Position__c, Target_this_quarter__c, Sales_rep__r.Name, Target_percentage__c, Sales_to_date_this_quarter__c
-            FROM Sales_target__c
-        ];
-
-        List<Sales_History__c> SalesHistory = new list < Sales_History__c > ();
-        for (sales_target__c SThistory: SalesTargets) {
-            Sales_History__c SalesHistoryIndividual = new Sales_History__c(
-                name = date.today().Month() + ' ' + date.today().Year() + ' ' + SThistory.Sales_rep__r.Name,
-                Percentage_of_Target__c = SThistory.Target_percentage__c,
-                Position__c = SThistory.Position__c,
-                Sales_target__c = SThistory.Target_this_quarter__c,
-                // FIXME: need to add total sales by quarter AND month
-                Total_Sales__c = SThistory.Sales_to_date_this_quarter__c,
-                User__c = SThistory.sales_rep__c
-            );
-            SalesHistory.add(SalesHistoryIndividual);
-        }
-        insert SalesHistory;
-    }
 
     @AuraEnabled
     public static list<hotOpportunity> HotOpportunities(id userid) {
