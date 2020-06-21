@@ -1,6 +1,6 @@
-public class SalesTargetInstaller {
+global class SalesTargetInstaller implements InstallHandler{
 
-    public static void install() {
+    global void onInstall(InstallContext context) {
         scheduleHistoryJob();
     }
 
