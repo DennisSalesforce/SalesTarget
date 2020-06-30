@@ -117,6 +117,13 @@
               </aura:if>
               <!-- /Awards row -->
 
+              <!-- Simulated empty Awards row -->
+              <aura:if isTrue="{! !stats.showAwards }">
+                <div class="awards" style="width: 219px;">
+                </div>
+              </aura:if>
+              <!-- /Awards row -->
+
             </div>
             <div class="progress-bar">
               <lightning:progressBar value="{! stats.targetPercentage }" />
