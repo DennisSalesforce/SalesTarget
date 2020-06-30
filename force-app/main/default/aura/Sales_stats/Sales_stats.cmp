@@ -1,6 +1,9 @@
-<aura:component controller="Sales_stats"
-  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
-  access="global">
+<aura:component
+  controller="Sales_stats"
+  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome"
+  access="global"
+>
+
   <aura:attribute name="runningUserId" type="string" />
   <aura:attribute name="showAwards" type="Boolean" />
   <aura:attribute name="showWonAwards" type="Boolean" default="FALSE" />

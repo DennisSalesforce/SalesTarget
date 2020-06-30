@@ -1,6 +1,7 @@
 <aura:component controller="Sales_stats"
-  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+  implements="force:appHostable,flexipage:availableForAllPageTypes"
   access="global">
+
   <aura:attribute name="SalesTarget" type="Sales_target__c[]" />
   <aura:attribute name="periodName" type="String" default="Month" />
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
