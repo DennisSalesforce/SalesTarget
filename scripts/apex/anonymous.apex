@@ -6,7 +6,11 @@ Boolean endofQuarter = salesAwardQuarterly.isEndOfQuarter();
 System.debug(endofQuarter);
 
 // Install code
-SalesTargetInstaller.install();
+new SalesTargetInstaller().onInstall(null);
+
+SalesHistoryJob.historySnapshot();
+
+SalesHistoryJob.sendEmail();
 
 
 SalesAwards task = new SalesAwards();
