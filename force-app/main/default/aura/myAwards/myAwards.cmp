@@ -12,34 +12,34 @@
     <div class="awards">
         <div class="slds-show_inline-block">
           <div class="award1">
-            <div class="left"><img src="/resource/1586526789000/numbr1" class="medal" /> 
+            <div class="left"><img src="/resource/1586526789000/numbr1" class="medal" />
               {! v.awards.goldMedal }x
             </div>
           </div>
-        </div> 
+        </div>
         <div class="slds-show_inline-block">
           <div class="award2">
             <div class="left"><img src="/resource/1586526789000/numbr2" class="medal" />
               {! v.awards.silverMedal }x
               </div>
           </div>
-        </div> 
+        </div>
         <div class="slds-show_inline-block">
           <div class="award3">
-            <div class="left"><img src="/resource/1586526789000/nmbr3" class="medal" /> 
+            <div class="left"><img src="/resource/1589912758000/numbr3" class="medal" />
               {! v.awards.bronzeMedal }x
           </div>
           </div>
-        </div> 
+        </div>
         <div class="slds-show_inline-block">
           <div class="award4">
-            <div class="left"><img src="/resource/1587402504000/completion_medal" class="medal" /> 
+            <div class="left"><img src="/resource/1587402504000/completion_medal" class="medal" />
               {! v.awards.hundredMedal }x
             </div>
           </div>
-        </div> 
+        </div>
       </div>
       </div>
     </article>
 
-</aura:component>	
+</aura:component>

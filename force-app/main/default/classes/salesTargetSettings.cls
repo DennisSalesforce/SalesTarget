@@ -123,11 +123,10 @@ public class salesTargetSettings {
 
         list < AggregateResult > toBeUpdateOpps = new list < AggregateResult > ();
         list < sales_target__c > toBeUpdateST = new list < sales_target__c > ();
-        toBeUpdateST = [select id, Sales_to_date_this_quarter__c, Sales_to_date_this_month__c, Sales_rep__c from Sales_target__c];
+        toBeUpdateST = [select id, Sales_to_date_this_quarter__c, Sales_rep__c from Sales_target__c];
 
         for (sales_target__c S: toBeUpdateST) {
-            //this is a bug that stopped the switch from working properly
-            //S.Sales_to_date_this_quarter__c = 0;
+            S.Sales_to_date_this_quarter__c = 0;
         }
         update toBeUpdateST;
 
@@ -160,7 +159,7 @@ public class salesTargetSettings {
                 id ownerid = (id) arr.get('ownerid');
                 decimal totalAmount = (Decimal) arr.get('expr0');
                 sales_target__c STfinal = (sales_target__c) STMap.get(ownerid);
-                STfinal.Sales_to_date_this_month__c = totalAmount;
+                STfinal.Sales_to_date_this_quarter__c = totalAmount;
                 System.debug('STFINAL' + STfinal);
             }
         } else {

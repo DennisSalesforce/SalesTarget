@@ -81,21 +81,9 @@ public class SalesStatsTest {
     system.debug(testTarget);
     }
 
-    @istest
-    public static void getTopTestMonthly(){
-    Sales_Target_Settings__c defaultSetting = DataFactory.setupTestDefaultSettingMonthly(); 
-    sales_target__c ST = DataFactory.setupTestSalesTarget();
-    test.starttest();
-    list<sales_target__c> testTargets = Sales_stats.getTop();
-    test.stoptest();
-    boolean result;
-    if(!testTargets.isempty()){
-        result = true;
-    } else {
-        result = false;
-    }
-    System.AssertEquals(true, result);
-    }
+        test.stoptest();
+        user u = [select id from user where username = 'standarduser34567890@testorg.com'];
+        List < Sales_target__c > SalesTarget = [SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c WHERE Sales_rep__c =: u.id LIMIT 1];
 
     @istest
     public static void getTopTestQuarterly(){
