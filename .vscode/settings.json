@@ -5,9 +5,7 @@
     "**/.sfdx": true
   },
   "files.exclude": {
-    "**/*.cls-meta.xml": true,
-    "**/*.cmp-meta.xml": true,
-    "**/*.trigger-meta.xml": true
+    "**/*.*-meta.xml": true
   },
   "salesforcedx-vscode-core.show-cli-success-msg": false,
   "files.insertFinalNewline": false
