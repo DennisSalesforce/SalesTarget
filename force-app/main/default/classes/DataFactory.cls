@@ -1,6 +1,6 @@
 @istest
 public class DataFactory {
-    
+
     public static user setupTestUser() {
         profile p = [select id from profile where name = 'System Administrator'
             limit 1
@@ -59,19 +59,20 @@ public class DataFactory {
         Sales_target__c SalesTarget = new Sales_target__c(
             name = 'SalesTarget',
             sales_rep__c = user.id,
-            year__c = '2020', 
+            year__c = '2020',
             Sales_Team__c = team.id
         );
         insert SalesTarget;
         system.debug(SalesTarget);
         return SalesTarget;
     }
+
     public static Sales_target__c setupTestSalesTargetNoUser(id userid) {
         Sales_Team__c team = DataFactory.setupTestTeam();
         Sales_target__c SalesTarget = new Sales_target__c(
             name = 'SalesTarget',
             sales_rep__c = userid,
-            year__c = '2020', 
+            year__c = '2020',
             Sales_Team__c = team.id
         );
         insert SalesTarget;

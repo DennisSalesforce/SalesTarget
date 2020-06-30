@@ -17,7 +17,7 @@ public class SalesAwardsTest {
         boolean result = false;
         if(TargetTest.size()>0){
             result = true;
-        } 
+        }
         System.assertEquals(true, result);
     }
 

@@ -8,7 +8,7 @@ global class SalesAwards implements Schedulable{
         return period.size() == 1;
     }
 
-    public List<Sales_Target__c> getRankedSalesTargets(String rankBy){
+    public static List<Sales_Target__c> getRankedSalesTargets(String rankBy){
         String query = 'SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Target_percentage_this_month__c, Sales_rep__c, Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c, Sales_to_date_this_month__c FROM Sales_target__c';
 
         if(!String.isBlank(rankBy)){
@@ -18,7 +18,7 @@ global class SalesAwards implements Schedulable{
         return Database.query(query);
     }
 
-    public String getAwardName(Sales_Award__c award){
+    public static String getAwardName(Sales_Award__c award){
         Datetime now = System.now();
         String month = now.format('MMMM');
         String year = now.format('yyyy');
@@ -39,7 +39,7 @@ global class SalesAwards implements Schedulable{
         return award.Award_Type__c;
     }
 
-    public String getAwardHistoryId(Sales_Award_History__c award){
+    public static String getAwardHistoryId(Sales_Award_History__c award){
         return 'unique id';
     }
 

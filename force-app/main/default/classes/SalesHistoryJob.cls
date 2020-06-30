@@ -1,7 +1,7 @@
 public class SalesHistoryJob implements Schedulable {
 
     public void execute(SchedulableContext sc) {
-        List<Sales_Target__c> salesTargets = null;
+        historySnapshot();
     }
 
     public static void historySnapshot(){
