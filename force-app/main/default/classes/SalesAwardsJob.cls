@@ -1,4 +1,8 @@
-global class SalesAwards implements Schedulable{
+global class SalesAwardsJob implements Schedulable{
+
+    public void execute(SchedulableContext sc) {
+        SalesAwardsJob.generateAwards();
+    }
 
     public static Boolean isEndOfQuarter(){
         // We run this on the first day of the month
@@ -40,10 +44,11 @@ global class SalesAwards implements Schedulable{
     }
 
     public static String getAwardHistoryId(Sales_Award_History__c award){
-        return 'unique id';
+        //TODO: investigate uniqueness
+        return SalesTargetUtils.md5(award.Name);
     }
 
-    public void awardsCodeDennis(){
+    public static void awardsCodeDennis(){
         list <Sales_Target__c> SalesTargetsTop3 = new List<Sales_target__c>();
 
         SalesTargetsTop3 = [SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__c, Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c order by Sales_to_date_this_quarter__c DESC limit 3];
@@ -79,8 +84,8 @@ global class SalesAwards implements Schedulable{
 
         insert top3;
     }
-    public void execute(SchedulableContext sc) {
 
+    public static void generateAwards(){
         // FIXME: Use the Sales History to know what happened instead of the current sales targets
 
         // List of awards to give at this moment
@@ -146,4 +151,5 @@ global class SalesAwards implements Schedulable{
         insert awarded;
         // Database.upsert(awarded, Sales_Award_History__c.Award_Id__c);
     }
+
 }
