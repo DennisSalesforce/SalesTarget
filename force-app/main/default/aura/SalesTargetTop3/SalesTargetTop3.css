@@ -6,7 +6,7 @@
 }
 
 .THIS hr {
-    margin: 8px 0;
+    margin: 10px 0;
 }
 
 .THIS .slds-card__body_inner{
@@ -42,6 +42,15 @@
     font-size: 110%;
     line-height: 100%;
     text-align: center;
+}
+
+.THIS .top10 .pos--label{
+    background-color: rgb(0, 156, 219);
+    padding: 4px 6px;
+    border-radius: 100%;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
 }
 
 .THIS .top10 .top10_name{
