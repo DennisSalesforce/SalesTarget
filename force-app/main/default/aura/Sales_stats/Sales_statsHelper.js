@@ -141,19 +141,29 @@
         });
         $A.enqueueAction(action);
     },
-    showHotOpportunityHelper: function (component, event) {
+
+    getHotOpportunities: function (component, event) {
         var userid = $A.get("$SObjectType.CurrentUser.Id");
         var action = component.get("c.HotOpportunities");
+
         action.setParams({
             userid: userid
         });
+
         action.setCallback(this, function (response) {
             var list = response.getReturnValue();
+            // Round scores
+            list = list.map(function (item) {
+                item.currentScore = Math.round(item.currentScore);
+                return item
+            })
+            // Sort by score
             list.sort( function (a, b) { return b.currentScore - a.currentScore } );
+
             component.set("v.hotOpportunities", list);
-            component.set("v.showHotOpportunties", true);
             console.log(response.getReturnValue());
         });
+
         $A.enqueueAction(action);
     }
 })

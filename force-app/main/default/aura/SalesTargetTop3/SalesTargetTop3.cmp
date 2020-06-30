@@ -1,26 +1,90 @@
 <aura:component controller="Sales_stats"
-    implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
-    access="global">
-    <aura:attribute name="SalesTarget" type="Sales_target__c[]" />
-    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-    <article class="slds-card">
-        <div class="slds-text-title"><h1><b>Top 3 Sales:</b></h1></div>
-        <div class="inline-box">
-        <div class="slds-show_inline-block">
-            <div class="left"><img src="/resource/1586526789000/numbr1" class="medal" /></div>
-            <div class="left"><img src="/resource/1586526789000/numbr2" class="medal" /></div>
-            <div class="left"><img src="/resource/1586526789000/nmbr3" class="medal" /></div>
+  implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+  access="global">
+  <aura:attribute name="SalesTarget" type="Sales_target__c[]" />
+  <aura:attribute name="periodName" type="String" default="Month" />
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+
+  <lightning:card title="{! 'Top 10 Sales Reps this '+ v.periodName }" iconName="custom:custom48">
+    <div class="slds-card__body_inner">
+
+      <aura:iteration items="{! v.SalesTarget }" var="person" indexVar="index">
+          <!-- Top 3 display -->
+          <aura:if isTrue="{! lessthan(index,3) }">
+            <div class="top3">
+              <div>
+                <aura:if isTrue="{! index == 0 }">
+                  <img src="/resource/1586526789000/numbr1" class="medal" />
+                </aura:if>
+                <aura:if isTrue="{! index == 1 }">
+                  <img src="/resource/1586526789000/numbr2" class="medal" />
+                </aura:if>
+                <aura:if isTrue="{! index == 2 }">
+                  <img src="/resource/1589912758000/numbr3" class="medal" />
+                </aura:if>
+              </div>
+              <div>
+                <b>
+                  <a href="{! '/lightning/r/User/' + person.Sales_rep__r.Id + '/view' }">
+                    {! person.Sales_rep__r.Name }
+                  </a><br/>
+                  <aura:if isTrue="{!v.periodName == 'Month'}">
+                    &nbsp;&nbsp;€ <lightning:formattedNumber value="{!person.Sales_to_date_this_month__c}" />
+                  </aura:if>
+                  <aura:if isTrue="{!v.periodName != 'Month'}">
+                    &nbsp;&nbsp;€ <lightning:formattedNumber value="{!person.Sales_to_date_this_quarter__c}" />
+                  </aura:if>
+                </b>
+              </div>
+            </div>
+          </aura:if>
+
+          <!-- Separation line between top3 -top10  -->
+          <aura:if isTrue="{! index == 2 }">
+            <hr />
+          </aura:if>
+
+          <!-- Res of users display -->
+          <aura:if isTrue="{! index > 2 }">
+            <div class="top10">
+              <div class="top10_pos">
+                #{! index+1 }
+              </div>
+              <div class="top10_name">
+                <b>
+                  <a href="{! '/lightning/r/User/' + person.Sales_rep__r.Id + '/view' }">
+                    {! person.Sales_rep__r.Name }
+                  </a>
+                </b>
+              </div>
+              <div style="flex: 1 0 auto;">
+                <aura:if isTrue="{!v.periodName == 'Month'}">
+                    &nbsp;&nbsp;€ <lightning:formattedNumber value="{!person.Sales_to_date_this_month__c}" />
+                  </aura:if>
+                  <aura:if isTrue="{!v.periodName != 'Month'}">
+                    &nbsp;&nbsp;€ <lightning:formattedNumber value="{!person.Sales_to_date_this_quarter__c}" />
+                  </aura:if>
+              </div>
+            </div>
+          </aura:if>
+
+
+        <!--
+      <div class="left"><img src="/resource/1586526789000/numbr2" class="medal" /></div>
+      <div class="left"><img src="/resource/1589912758000/numbr3" class="medal" /></div>
+
+      <div class="slds-show_inline-block">
+          <div class="right">{!Top3.Sales_rep__r.Name}<br />€
+            <lightning:formattedNumber value="{!person.Sales_to_date_this_quarter__c}" />
+          </div>
         </div>
-        <div class="slds-show_inline-block">
-                <div class="middle">Name: <br/>Sales: </div>
-                <div class="middle">Name: <br/>Sales: </div>
-                <div class="middle">Name: <br/>Sales: </div>
-        </div>
-        <div class="slds-show_inline-block">
-            <aura:iteration items="{!v.SalesTarget}" var="Top3">
-                <div class="right">{!Top3.Sales_rep__r.Name}<br/>€<lightning:formattedNumber value="{!Top3.Sales_to_date_this_quarter__c}" /></div>
-            </aura:iteration>
-        </div>
-        </div>
-    </article>
+      </div>
+      -->
+
+      </aura:iteration>
+
+    </div>
+  </lightning:card>
+
 </aura:component>

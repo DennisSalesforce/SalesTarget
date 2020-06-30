@@ -1,51 +1,34 @@
 public class opportunityHandler {
 
-    public static void updateSalesTarget(id userID, decimal amount, id oppID){
-        list<sobject> opportunityAmount = new list<sobject>();
-        boolean setting;
+    // @future
+    public static void updateSalesTarget(Id userId) {
+        // Get this months ammount
+        List<sObject> opportunityAmountMonth = [
+            SELECT SUM(amount) total from opportunity where ownerid =: userId
+            AND StageName = 'Closed Won'
+            AND closeDate = THIS_MONTH
+        ];
+        decimal totalMonthAmount = (decimal) opportunityAmountMonth[0].get('total');
+		system.debug('TotalMonthAmount'+ totalMonthAmount);
+        // Get this Quarter's ammount
+        List<sObject> opportunityAmountQuarter = [
+            SELECT SUM(amount) total from opportunity where ownerid =: userId
+            AND StageName = 'Closed Won'
+            AND closeDate = THIS_QUARTER
+        ];
+        decimal totalQuarterAmount = (decimal) opportunityAmountQuarter[0].get('total');
+		system.debug('TotalQuarterAmount'+ totalQuarterAmount);
+        // Update user's sales target
+        Sales_target__c userSalesTarget = SalesTargetUtils.getUserSTForThisYear(userId);
+		system.debug('UserSalesTarget'+ userSalesTarget);
         
-        Sales_Target_Settings__c STsetting = [select monthly__c from Sales_Target_Settings__c limit 1];
+        if(userSalesTarget != null){
+            userSalesTarget.Sales_to_date_this_quarter__c = totalQuarterAmount == null ? 0 : totalQuarterAmount;
+            userSalesTarget.Sales_to_date_this_month__c = totalMonthAmount == null ? 0 : totalMonthAmount;
 
-        setting = STsetting.monthly__c;
-         
-        IF (setting == TRUE){
-            opportunityAmount = [select sum(amount) total from opportunity where ownerid = :userID and StageName = 'Closed Won' and closeDate = THIS_MONTH];
-                            } else {
-            opportunityAmount = [select sum(amount) total from opportunity where ownerid = :userID and StageName = 'Closed Won' and closeDate = THIS_QUARTER];                
-                        }
-
-
-        list<Sales_target__c> ST = [select id, Position__c, Target_percentage__c, Sales_to_date_this_quarter__c, Sales_rep__c from Sales_target__c where Sales_rep__c = :userID];
-        //opportunityAmount = [select sum(amount) total from opportunity where ownerid = :userID and StageName = 'Closed Won' and closeDate = THIS_QUARTER];
-
-        decimal totalAmount = (decimal)opportunityAmount[0].get('total');
-        
-        for(Sales_target__c SalesTarget : ST){
-           SalesTarget.Sales_to_date_this_quarter__c = totalAmount;
-        }
-   		update ST;
-    
-    }
-    
-    public static void updatePosition(id userID, decimal amount, id oppID){
-         
-        integer position = 0;
-
-        list<Sales_target__c> salesTargetForPosition = [select id,of_sales_targets__c, Position__c, Sales_to_date_this_quarter__c from Sales_target__c order by Sales_to_date_this_quarter__c DESC];
-        
-        for(Sales_target__c SalesTarget : salesTargetForPosition){
-            position++;
-            SalesTarget.Position__c = position;
-            system.debug('position number: ' + SalesTarget.Position__c);
+            update userSalesTarget;
+            system.debug('SalesTarget AFTER update' + userSalesTarget);
         }
 
-        for(Sales_target__c SalesTargetTotal : salesTargetForPosition ){
-        SalesTargetTotal.of_sales_targets__c = position;
     }
-
-        System.debug(position);
-   		update salesTargetForPosition;
-    
-    }   
-
 }

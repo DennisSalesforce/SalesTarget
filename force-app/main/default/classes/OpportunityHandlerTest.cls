@@ -1,42 +1,21 @@
-@istest
+@istest(seeAllData=true)
 public class OpportunityHandlerTest {
 
     @istest
-    private static void makeData() {
-        Opportunity o = new opportunity(
-            name = 'test opp',
-            closedate = date.today(),
-            amount = 1000,
-            ownerid = '0053X00000BSPfgQAH',
-            stageName = 'Closed Won'
-        );
-        insert o;
-
-        id userID = '0053X00000BSPfgQAH';
-        decimal amount = 1000;
-        id oppID = o.id;
-
-        list < sobject > OpportunityTestAmount = new list < sobject > ();
-
-        Sales_target__c SalesTarget = new Sales_target__c(
-            name = 'SalesTarget',
-            sales_rep__c = '0053X00000BSPfgQAH'
-        );
-        insert SalesTarget;
-
-
-
+    private static void opportunityHandler() { 
+        user u = DataFactory.setupTestUser();
+        sales_target__c ST = DataFactory.setupTestSalesTarget(u.id);
+        opportunity o = DataFactory.setupTestOpportunity(u.id);
         test.starttest();
-        Sales_Target_Settings__c STsetting = [select monthly__c from Sales_Target_Settings__c limit 1];
+        o.StageName = 'Closed Won';
+        update o;
         test.stoptest();
+        sales_target__c STtest = [select Sales_to_date_this_month__c,Sales_to_date_this_quarter__c  from sales_target__c where id =: ST.id limit 1];
 
-        sales_target__c ST = [select Sales_to_date_this_quarter__c from sales_target__c where id =: SalesTarget.id];
+        system.debug('DEBUG MONTH '+ STtest.Sales_to_date_this_month__c);
 
-        decimal OppAmount = ST.Sales_to_date_this_quarter__c;
-
-
-        System.assertEquals(OppAmount, 1000);
-
+        System.assertEquals(1000,STtest.Sales_to_date_this_month__c);
+        System.assertEquals(1000,STtest.Sales_to_date_this_quarter__c);
 
     }
 }
