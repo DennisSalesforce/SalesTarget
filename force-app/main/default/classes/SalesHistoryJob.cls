@@ -1,7 +1,7 @@
 public class SalesHistoryJob implements Schedulable {
 
     public void execute(SchedulableContext sc) {
-        historySnapshot();
+        List<Sales_Target__c> salesTargets = null;
     }
 
     public static void historySnapshot(){
@@ -15,6 +15,16 @@ public class SalesHistoryJob implements Schedulable {
 
         List<Sales_History__c> salesHistories = new List<Sales_History__c>();
 
+        // Fields that we want for History
+        // Name (yyyy mm dd - agent name)
+        // Date (yyy mm dd) (daily)
+        // Type (picklist Monthly / Quarter)
+        // Sales Target (Decimal)
+        // Sales so far (Decimal)
+        // Closed Opps Won/Lost (Decimal) (v2)
+        // Open Opps (Decimal) (v2)
+        // Percentage (Formula)
+        // Position (Decimal)
 
         for (sales_target__c target: SalesTargets) {
 
@@ -57,5 +67,6 @@ public class SalesHistoryJob implements Schedulable {
         // Insert new ones
         Database.upsert(salesHistories, Sales_History__c.History_Id__c);
     }
+
 
 }

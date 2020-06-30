@@ -79,7 +79,6 @@ global class SalesAwards implements Schedulable{
 
         insert top3;
     }
-
     public void execute(SchedulableContext sc) {
 
         // FIXME: Use the Sales History to know what happened instead of the current sales targets
