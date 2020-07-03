@@ -1,29 +1,40 @@
 global class SalesTargetInstaller implements InstallHandler{
 
     global void onInstall(InstallContext context) {
-        SalesTargetInstaller.scheduleHistoryJob();
-        SalesTargetInstaller.scheduleAwardsJob();
+        SalesTargetInstaller.cancellAllScheduledJobs();
+        SalesTargetInstaller.scheduleJobs();
     }
 
-    private static void scheduleHistoryJob(){
-        SalesHistoryJob shJob = new SalesHistoryJob();
+    public static List<CronTrigger> getAllDefinedJobs(){
+        return [
+            SELECT Id FROM CronTrigger
+            WHERE CronJobDetail.Name LIKE 'ST-%'
+        ];
+    }
 
+    public static void cancellAllScheduledJobs(){
+        // Lookup of jobs defined here
+        List<CronTrigger> triggers = getAllDefinedJobs();
+        // Cancel jobs
+        for(CronTrigger ct : triggers){
+            System.abortJob(ct.Id);
+        }
+    }
+
+    private static void scheduleJobs(){
         // Schedule set to run every hour
-        String sch = '0 0 * * * ?';
-        String jobID = system.schedule('SalesHistoryJob-Hourly', sch, shJob);
+        System.schedule(
+            'ST-SalesHistoryJob-Hourly',
+            '0 0 * * * ?',
+            new SalesHistoryJob()
+        );
+        // Schedule set to run every day at the end of the day
 
-        System.debug(jobID);
-    }
-
-    private static void scheduleAwardsJob(){
-        //TODO: figure the schedule for this
-        // SalesHistoryJob shJob = new SalesAwardsJob();
-
-        // // Schedule set to run every hour
-        // String sch = '0 0 * * * ?';
-        // String jobID = system.schedule('SalesAwardsJob-Hourly', sch, shJob);
-
-        // System.debug(jobID);
+        System.schedule(
+            'ST-SalesAwardsJob-Daily',
+            '23 50 0 * * ?',
+            new SalesAwardsJob()
+        );
     }
 
 }

@@ -1,8 +1,11 @@
 public class SalesHistoryJob implements Schedulable {
 
     public void execute(SchedulableContext sc) {
-        SalesHistoryJob.historySnapshot();
-        SalesHistoryJob.sendEmail();
+        try {
+            SalesHistoryJob.historySnapshot();
+        } catch (Exception e) {
+            SalesTargetUtils.sendEmail('SalesHistoryJob Failed', String.valueOf(e));
+        }
     }
 
     public static void historySnapshot(){
@@ -67,22 +70,6 @@ public class SalesHistoryJob implements Schedulable {
 
         // Insert new ones
         Database.upsert(salesHistories, Sales_History__c.History_Id__c);
-    }
-
-    public static void sendEmail(){
-        Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
-        message.toAddresses = new String[] { 'dennis_smits12@hotmail.com' };
-        message.optOutPolicy = 'FILTER';
-        message.subject = 'Scheduled Job running right now';
-        message.plainTextBody = 'Scheduled Job running right now.';
-        Messaging.SingleEmailMessage[] messages =   new List<Messaging.SingleEmailMessage> {message};
-        Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
-
-        if (results[0].success) {
-            System.debug('The email was sent successfully.');
-        } else {
-            System.debug('The email failed to send: ' + results[0].errors[0].message);
-        }
     }
 
 }

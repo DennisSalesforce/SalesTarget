@@ -43,4 +43,21 @@ public class SalesTargetUtils {
         return EncodingUtil.base64Encode(Crypto.generateDigest('MD5', Blob.valueOf(input)));
     }
 
+
+    public static void sendEmail(String subject, String messageText){
+        Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
+        message.toAddresses = new String[] { 'dennis_smits12@hotmail.com' };
+        message.optOutPolicy = 'FILTER';
+        message.subject = subject;
+        message.plainTextBody = messageText;
+        Messaging.SingleEmailMessage[] messages =   new List<Messaging.SingleEmailMessage> {message};
+        Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
+
+        if (results[0].success) {
+            System.debug('The email was sent successfully.');
+        } else {
+            System.debug('The email failed to send: ' + results[0].errors[0].message);
+        }
+    }
+
 }
