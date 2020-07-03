@@ -50,16 +50,15 @@ public class SalesAwardsTest {
         string uniqueId = SalesAwardsJob.getawardHistoryId(history);
         test.stopTest();
         System.assertEquals('Ah2hsg9z3CUjYaVNgEl+8w==', uniqueId);
+    }
 
-    }
-    
-    @istest
-    public static void testAwardCodeDennis(){
-        DataFactory.setupTestDefaultSettingMonthly();
-        sales_target__c target = DataFactory.setupTestSalesTarget();
-        Sales_award_history__c history = DataFactory.setupTestAwardsHistory(target.sales_rep__c);
-        test.startTest();
-        SalesAwardsJob.awardsCodeDennis();
-        test.stopTest();
-    }
+    // @istest
+    // public static void testAwardCodeDennis(){
+    //     DataFactory.setupTestDefaultSettingMonthly();
+    //     sales_target__c target = DataFactory.setupTestSalesTarget();
+    //     Sales_award_history__c history = DataFactory.setupTestAwardsHistory(target.sales_rep__c);
+    //     test.startTest();
+    //     SalesAwardsJob.awardsCodeDennis();
+    //     test.stopTest();
+    // }
 }

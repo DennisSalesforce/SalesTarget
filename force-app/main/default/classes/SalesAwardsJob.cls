@@ -1,28 +1,47 @@
 global class SalesAwardsJob implements Schedulable{
 
     public void execute(SchedulableContext sc) {
-        SalesAwardsJob.generateAwards();
+        try {
+            SalesAwardsJob.generateAwards();
+        } catch (Exception e) {
+            SalesTargetUtils.sendEmail('SalesAwardsJob Failed', String.valueOf(e));
+        }
+    }
+
+    public static Boolean isEndOfMonth(){
+        // We run this on the first day of the month
+        List<Period> period = [
+            SELECT Id FROM Period
+            WHERE EndDate = TODAY AND Type = 'Month'
+        ];
+        return period.size() == 1;
+        // return true;
     }
 
     public static Boolean isEndOfQuarter(){
         // We run this on the first day of the month
-        List<Period> period = [SELECT Id FROM Period
-            WHERE StartDate = TODAY AND Type = 'Quarter'
+        List<Period> period = [
+            SELECT Id FROM Period
+            WHERE EndDate = TODAY AND Type = 'Quarter'
         ];
         return period.size() == 1;
+        // return true;
     }
 
     public static List<Sales_Target__c> getRankedSalesTargets(String rankBy){
-        String query = 'SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Target_percentage_this_month__c, Sales_rep__c, Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c, Sales_to_date_this_month__c FROM Sales_target__c';
+        String query = 'SELECT Id, Sales_rep__c, Sales_rep__r.Name, Target_percentage_this_month__c, Target_percentage__c FROM Sales_target__c';
 
         if(!String.isBlank(rankBy)){
             query += ' ORDER BY '+rankBy+' DESC';
         }
 
+
+        System.debug(Database.query(query));
+
         return Database.query(query);
     }
 
-    public static String getAwardName(Sales_Award__c award){
+    public static String getAwardName(Sales_Award__c award, String salesRepName){
         Datetime now = System.now();
         String month = now.format('MMMM');
         String year = now.format('yyyy');
@@ -33,11 +52,11 @@ global class SalesAwardsJob implements Schedulable{
             if(award.Position__c == 2) ordinal += '2nd';
             if(award.Position__c == 3) ordinal += '3rd';
             if(award.Position__c >= 4) ordinal += award.Position__c+'th';
-            return ordinal +' Prize Sales - ' + month + ' ' + year;
+            return ordinal +' Prize Sales - ' + award.Period__c + ' - ' + month + ' ' + year;
         }
 
         if(award.Award_Type__c == 'Completion'){
-            return '100% Target - ' + month + ' ' + year;
+            return '100% Target - ' + award.Period__c + ' - ' + month + ' ' + year + ' - ' + salesRepName;
         }
 
         return award.Award_Type__c;
@@ -48,61 +67,23 @@ global class SalesAwardsJob implements Schedulable{
         return SalesTargetUtils.md5(award.Name);
     }
 
-    public static void awardsCodeDennis(){
-        list <Sales_Target__c> SalesTargetsTop3 = new List<Sales_target__c>();
-
-        SalesTargetsTop3 = [SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__c, Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c order by Sales_to_date_this_quarter__c DESC limit 3];
-
-        sales_award__c nr1 = [SELECT id from sales_award__c where name = '1st Prize Sales' limit 1 ];
-        sales_award__c nr2 = [SELECT id from sales_award__c where name = '2nd Prize Sales' limit 1 ];
-        sales_award__c nr3 = [SELECT id from sales_award__c where name = '3th Prize Sales' limit 1 ];
-
-        List<Sales_Award_History__c> top3 = new list <Sales_Award_History__c> ();
-
-        integer i = 0;
-        for (sales_target__c STTOP3: SalesTargetsTop3) {
-            Sales_Award_History__c SAHTOP3 = new Sales_Award_History__c();
-            SAHTOP3.name = 'April 2020';
-            SAHTOP3.User__c = STTOP3.Sales_rep__c;
-            if (i == 0) {
-                SAHTOP3.Sales_Award__c = nr1.id;
-                System.debug(SAHTOP3.Sales_Award__c + 'SAHTOP3.Sales_Award__c');
-            }
-            if (i == 1) {
-                SAHTOP3.Sales_Award__c = nr2.id;
-                System.debug(SAHTOP3.Sales_Award__c + 'SAHTOP3.Sales_Award__c');
-            }
-            if (i == 2) {
-                SAHTOP3.Sales_Award__c = nr3.id;
-                System.debug(SAHTOP3.Sales_Award__c + 'SAHTOP3.Sales_Award__c');
-            }
-
-
-            top3.add(SAHTOP3);
-            i++;
-        }
-
-        insert top3;
-    }
-
     public static void generateAwards(){
         // FIXME: Use the Sales History to know what happened instead of the current sales targets
 
         // List of awards to give at this moment
         List<Sales_Award__c> awardsToGive = new List<Sales_Award__c>();
-        Boolean isEndOfQuarter = isEndOfQuarter();
 
-        System.debug('isEndOfQuarter ' +isEndOfQuarter);
-
-        awardsToGive.addAll([
-            SELECT Id, Position__c, Award_Type__c, Period__c
-            FROM Sales_Award__c WHERE Period__c = 'Monthly'
-        ]);
-
-        if(isEndOfQuarter){
+        if(isEndOfMonth()){
             awardsToGive.addAll([
                 SELECT Id, Position__c, Award_Type__c, Period__c
-                FROM Sales_Award__c WHERE Period__c = 'Quaterly'
+                FROM Sales_Award__c WHERE Period__c = 'Monthly'
+            ]);
+        }
+
+        if(isEndOfQuarter()){
+            awardsToGive.addAll([
+                SELECT Id, Position__c, Award_Type__c, Period__c
+                FROM Sales_Award__c WHERE Period__c = 'Quarterly'
             ]);
         }
 
@@ -115,14 +96,14 @@ global class SalesAwardsJob implements Schedulable{
             if(award.Award_Type__c == 'Rank'){
                 // Ranked award type
                 List<Sales_target__c> ranked = getRankedSalesTargets(
-                    isEndOfQuarter ? 'Sales_to_date_this_quarter__c' : 'Sales_to_date_this_month__c'
+                    award.Period__c == 'Quarterly' ? 'Sales_to_date_this_quarter__c' : 'Sales_to_date_this_month__c'
                 );
 
                 // Check if we have a rank at that position
                 if(ranked.size() >= award.Position__c){
 
-                    Id awardedRepId = ranked.get(Integer.valueOf(award.Position__c)).Sales_Rep__c;
-                    String awardName = getAwardName(award);
+                    Id awardedRepId = ranked.get(Math.round(award.Position__c)-1).Sales_rep__c;
+                    String awardName = getAwardName(award, null);
 
                     Sales_Award_History__c newAward = new Sales_Award_History__c(
                         Name=awardName,
@@ -132,24 +113,38 @@ global class SalesAwardsJob implements Schedulable{
                     newAward.Award_Id__c = getAwardHistoryId(newAward);
 
                     System.debug(newAward);
-
                     awarded.add(newAward);
                 }
 
             }
 
-            // if(award.Award_Type__c == 'Completion'){
-            //     // Completionist award
-            //     List<Sales_target__c> salesTargets = getRankedSalesTargets();
+            if(award.Award_Type__c == 'Completion'){
+                // Completionist award
+                List<Sales_target__c> salesTargets = getRankedSalesTargets('Sales_to_date_this_month__c');
 
-            // }
+                for(Sales_target__c st : salesTargets){
+                    if(     (award.Period__c == 'Monthly'   &&  st.Target_percentage_this_month__c >= 100)
+                         || (award.Period__c == 'Quarterly' &&  st.Target_percentage__c >= 100) ){
+                        // Award for this award
+
+                        Sales_Award_History__c newAward = new Sales_Award_History__c(
+                            Name=getAwardName(award, st.Sales_rep__r.Name),
+                            User__c=st.Sales_rep__c,
+                            Sales_Award__c=award.id
+                        );
+                        newAward.Award_Id__c = getAwardHistoryId(newAward);
+
+                        System.debug(newAward);
+                        awarded.add(newAward);
+                    }
+                }
+
+            }
         }
 
-        System.debug(awarded);
-
         // Upsert all created awards
-        insert awarded;
-        // Database.upsert(awarded, Sales_Award_History__c.Award_Id__c);
+        // insert awarded;
+        Database.upsert(awarded, Sales_Award_History__c.Award_Id__c);
     }
 
 }

@@ -18,7 +18,7 @@
   <aura:attribute name="wonAwards" type="Object[]" />
   <aura:attribute name="hotOpportunities" type="Object[]" />
 
-  <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" />
+  <!-- <aura:handler name="render" value="{!this}" action="{!c.loadProgress}" /> -->
   <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
 
   <lightning:card>
