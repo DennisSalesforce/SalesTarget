@@ -28,7 +28,7 @@ public class SalesAwardsTest {
         string awardTest = SalesAwardsJob.getAwardName(award);
         test.stopTest();
         system.debug(awardTest);
-        System.AssertEquals('1st Prize Sales - June 2020',awardTest);
+        System.AssertEquals('1st Prize Sales - July 2020',awardTest);
     }
 
     @istest
@@ -38,7 +38,7 @@ public class SalesAwardsTest {
         string awardTest = SalesAwardsJob.getAwardName(award);
         test.stopTest();
         system.debug(awardTest);
-        System.AssertEquals('100% Target - June 2020',awardTest);
+        System.AssertEquals('100% Target - July 2020',awardTest);
     }
 
     @istest
@@ -51,5 +51,15 @@ public class SalesAwardsTest {
         test.stopTest();
         System.assertEquals('Ah2hsg9z3CUjYaVNgEl+8w==', uniqueId);
 
+    }
+    
+    @istest
+    public static void testAwardCodeDennis(){
+        DataFactory.setupTestDefaultSettingMonthly();
+        sales_target__c target = DataFactory.setupTestSalesTarget();
+        Sales_award_history__c history = DataFactory.setupTestAwardsHistory(target.sales_rep__c);
+        test.startTest();
+        SalesAwardsJob.awardsCodeDennis();
+        test.stopTest();
     }
 }

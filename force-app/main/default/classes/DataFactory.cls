@@ -60,7 +60,8 @@ public class DataFactory {
             name = 'SalesTarget',
             sales_rep__c = user.id,
             year__c = '2020',
-            Sales_Team__c = team.id
+            Sales_Team__c = team.id,
+            target_july__c = 100
         );
         insert SalesTarget;
         system.debug(SalesTarget);
@@ -73,7 +74,8 @@ public class DataFactory {
             name = 'SalesTarget',
             sales_rep__c = userid,
             year__c = '2020',
-            Sales_Team__c = team.id
+            Sales_Team__c = team.id,
+            target_july__c = 100
         );
         insert SalesTarget;
         system.debug(SalesTarget);
@@ -109,28 +111,28 @@ public class DataFactory {
     public static Sales_award_history__c setupTestAwardsHistory(id userid) {
         Sales_award__c GoldAward = new Sales_award__c(
             Name = '1st Prize Sales',
-            Period__c = 'Monthly',
+            Period__c = 'Quarterly',
             Position__c = 1,
             Award_type__c = 'Rank'
         );
         insert GoldAward;
         Sales_award__c SilverAward = new Sales_award__c(
             Name = '2nd Prize Sales',
-            Period__c = 'Monthly',
+            Period__c = 'Quarterly',
             Position__c = 1,
             Award_type__c = 'Rank'
         );
         insert SilverAward;
         Sales_award__c BronzeAward = new Sales_award__c(
             Name = '3th Prize Sales',
-            Period__c = 'Monthly',
+            Period__c = 'Quarterly',
             Position__c = 1,
             Award_type__c = 'Rank'
         );
         insert BronzeAward;
         Sales_award__c HundredAward = new Sales_award__c(
             Name = '100% Target Achievement',
-            Period__c = 'Monthly',
+            Period__c = 'Quarterly',
             Award_type__c = 'Completion'
         );
         insert HundredAward;

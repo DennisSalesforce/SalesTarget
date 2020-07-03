@@ -53,9 +53,9 @@ global class SalesAwardsJob implements Schedulable{
 
         SalesTargetsTop3 = [SELECT Id, icon__c, of_sales_targets__c, Position__c, Target_this_quarter__c, Target_percentage__c, Sales_rep__c, Sales_rep__r.Name, Name, Target_Q1__c, Target_Q2__c, Target_Q3__c, Target_Q4__c, Sales_to_date_this_quarter__c FROM Sales_target__c order by Sales_to_date_this_quarter__c DESC limit 3];
 
-        sales_award__c nr1 = [SELECT id from sales_award__c where name = '1st Prize Sales - Quarterly' limit 1 ];
-        sales_award__c nr2 = [SELECT id from sales_award__c where name = '2nd Prize Sales - Quarterly' limit 1 ];
-        sales_award__c nr3 = [SELECT id from sales_award__c where name = '3th Prize Sales - Quarterly' limit 1 ];
+        sales_award__c nr1 = [SELECT id from sales_award__c where name = '1st Prize Sales' limit 1 ];
+        sales_award__c nr2 = [SELECT id from sales_award__c where name = '2nd Prize Sales' limit 1 ];
+        sales_award__c nr3 = [SELECT id from sales_award__c where name = '3th Prize Sales' limit 1 ];
 
         List<Sales_Award_History__c> top3 = new list <Sales_Award_History__c> ();
 
