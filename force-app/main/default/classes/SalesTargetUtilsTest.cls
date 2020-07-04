@@ -7,10 +7,12 @@ public class SalesTargetUtilsTest {
         sales_target__c ST = DataFactory.setupTestSalesTarget();
         test.StartTest();
         integer positionMonth = SalesTargetUtils.getSalesTargetPosition(ST, 'Monthly');
+        system.debug('month' + positionMonth);
         integer positionQuarter = SalesTargetUtils.getSalesTargetPosition(ST, 'Quarterly');
+        system.debug('Quarter' + positionQuarter);
         //sales_target__c SalesTargetTest = SalesTargetUtils.getUserSTForThisYear(ST.sales_rep__c);
         test.StopTest();
-        System.assertEquals(2, positionMonth);
+        System.assertEquals(1, positionMonth);
         System.assertEquals(2, positionQuarter);
         //System.assertEquals('SalesTarget', SalesTargetTest.Name);
     }
@@ -49,5 +51,12 @@ public class SalesTargetUtilsTest {
         sales_target__c SalesTargetTest = SalesTargetUtils.getUserSTForThisYear(ST.sales_rep__c);
         test.StopTest();
         System.assertEquals('SalesTarget', SalesTargetTest.Name);
+    }
+    
+    @istest
+    public static void sendEmail(){
+        test.startTest();
+        SalesTargetUtils.sendEmail('subject', 'message');
+        test.stopTest();
     }
 }

@@ -61,7 +61,8 @@ public class DataFactory {
             sales_rep__c = user.id,
             year__c = '2020',
             Sales_Team__c = team.id,
-            target_july__c = 100
+            target_july__c = 1000,
+            Sales_to_date_this_month__c = 1100
         );
         insert SalesTarget;
         system.debug(SalesTarget);
@@ -75,9 +76,11 @@ public class DataFactory {
             sales_rep__c = userid,
             year__c = '2020',
             Sales_Team__c = team.id,
-            target_july__c = 100
+            target_july__c = 100,
+            Sales_to_date_this_month__c = 110
         );
         insert SalesTarget;
+        system.debug('PERCENTAGE' + SalesTarget.Target_percentage_this_month__c);
         system.debug(SalesTarget);
         return SalesTarget;
     }

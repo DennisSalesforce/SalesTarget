@@ -10,7 +10,7 @@ public class SalesHistoryJob implements Schedulable {
 
     public static void historySnapshot(){
         List<Sales_Target__c> SalesTargets = [
-            SELECT sales_rep__c, Sales_rep__r.Name, Id, Sales_team__c, Target_this_quarter__c, Target_this_month__c
+            SELECT sales_team__r.Name, sales_rep__c, Sales_rep__r.Name, Id, Sales_team__c, Target_this_quarter__c, Target_this_month__c
             , Sales_to_date_this_quarter__c, Sales_to_date_this_month__c
             FROM Sales_target__c
         ];
@@ -71,5 +71,6 @@ public class SalesHistoryJob implements Schedulable {
         // Insert new ones
         Database.upsert(salesHistories, Sales_History__c.History_Id__c);
     }
+
 
 }

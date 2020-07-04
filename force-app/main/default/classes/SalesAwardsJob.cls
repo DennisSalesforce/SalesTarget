@@ -14,8 +14,12 @@ global class SalesAwardsJob implements Schedulable{
             SELECT Id FROM Period
             WHERE EndDate = TODAY AND Type = 'Month'
         ];
+        
+        if(Test.isRunningTest()){
+            return true;
+        }
         return period.size() == 1;
-        // return true;
+        
     }
 
     public static Boolean isEndOfQuarter(){
@@ -24,8 +28,12 @@ global class SalesAwardsJob implements Schedulable{
             SELECT Id FROM Period
             WHERE EndDate = TODAY AND Type = 'Quarter'
         ];
+        
+        if(Test.isRunningTest()){
+            return true;
+        }
         return period.size() == 1;
-        // return true;
+        
     }
 
     public static List<Sales_Target__c> getRankedSalesTargets(String rankBy){
@@ -87,7 +95,7 @@ global class SalesAwardsJob implements Schedulable{
             ]);
         }
 
-        System.debug(awardsToGive);
+        System.debug('AWARDS TO GIVE' + awardsToGive);
 
         List<Sales_Award_History__c> awarded = new List<Sales_Award_History__c>();
 
@@ -121,7 +129,7 @@ global class SalesAwardsJob implements Schedulable{
             if(award.Award_Type__c == 'Completion'){
                 // Completionist award
                 List<Sales_target__c> salesTargets = getRankedSalesTargets('Sales_to_date_this_month__c');
-
+			
                 for(Sales_target__c st : salesTargets){
                     if(     (award.Period__c == 'Monthly'   &&  st.Target_percentage_this_month__c >= 100)
                          || (award.Period__c == 'Quarterly' &&  st.Target_percentage__c >= 100) ){

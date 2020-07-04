@@ -223,10 +223,5 @@ public class SalesStatsTest {
         System.assertEquals(true,result);
     }
 
-    @istest
-    public static void testEmail(){
-        string test = 'test';
-        SalesHistoryJob.sendEmail(test);
-    }
 
 }
